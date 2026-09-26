@@ -21,9 +21,9 @@
   color-scheme:light;
   --bg:#F4F2FA; --surface:#FFFFFF; --sunk:#ECE8F6; --ink:#1E1A3A; --muted:#5E587A; --line:#DAD4EA;
   --bar:#1E1A3A; --bar-ink:#F4F2FA; --bar-muted:#A79FC6;
-  --accent:#C96F00; --accent-ink:#1E1A3A; --accent-btn:#E8900F; --accent-soft:#FBEBD3; --teal:#0F6E75; --teal-soft:#DDF0EF;
+  --accent:#C96F00; --accent-btn:#E8900F; --accent-soft:#FBEBD3; --teal:#0F6E75; --teal-soft:#DDF0EF;
   --good:#1E7A45; --good-bg:#DDF2E4; --warn:#8A6400; --warn-bg:#F7EDCC; --bad:#A3302A; --bad-bg:#F8DEDB;
-  --outside:#E4E0F0;
+  --outside:#E4E0F0; --scrim:rgba(17,14,34,.45);
   --display:"Yatra One","Mukta",Georgia,serif; --body:"Mukta",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 @media (prefers-color-scheme:dark){:root{
@@ -32,136 +32,152 @@
   --bar:#0B0918; --bar-ink:#EDE9F7; --bar-muted:#8A82AC;
   --accent:#F2A93B; --accent-btn:#F2A93B; --accent-soft:#3A2A12; --teal:#5CC6C9; --teal-soft:#15333A;
   --good:#6FD39A; --good-bg:#15332A; --warn:#E8C45A; --warn-bg:#3A3015; --bad:#F08A80; --bad-bg:#3D1E1E;
-  --outside:#07060F;
+  --outside:#07060F; --scrim:rgba(0,0,0,.6);
 }}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
-html,body{height:100%}
-body{margin:0;background:var(--outside);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
-h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.2;text-wrap:balance}
+html,body{height:100%;overflow:hidden}
+body{margin:0;background:var(--outside);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.4}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.15}
 p{margin:0}
 button,input{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-.app{max-width:480px;min-height:100%;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;position:relative}
+/* app shell: exactly one screen tall */
+.app{max-width:480px;height:100vh;height:100dvh;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden}
 @media (min-width:520px){.app{box-shadow:0 0 0 1px var(--line)}}
+.topbar{flex:none;background:var(--bar);color:var(--bar-ink);padding:calc(env(safe-area-inset-top,0px) + 8px) 14px 8px;display:flex;align-items:center;gap:10px}
+.topbar .logo{width:30px;height:30px;border-radius:8px;background:var(--accent-btn);display:grid;place-items:center;font-family:var(--display);color:#1E1A3A;font-size:1.1rem;flex:none}
+.topbar .t{display:grid;line-height:1.1;min-width:0}
+.topbar h1{font-size:1.15rem}
+.topbar small{color:var(--bar-muted);font-size:.75rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .inst{margin-left:auto;border:0;border-radius:8px;background:var(--teal);color:#fff;font-weight:700;font-size:.8rem;padding:5px 10px;cursor:pointer}
 
-.topbar{position:sticky;top:0;z-index:5;background:var(--bar);color:var(--bar-ink);padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 12px;display:flex;align-items:center;gap:12px}
-.topbar .logo{width:34px;height:34px;border-radius:9px;background:var(--accent-btn);display:grid;place-items:center;font-family:var(--display);color:#1E1A3A;font-size:1.25rem;flex:none}
-.topbar .t{display:grid;line-height:1.15;min-width:0}
-.topbar h1{font-size:1.25rem}
-.topbar small{color:var(--bar-muted);font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+main{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:10px 12px}
+.screen{min-height:100%;display:flex;flex-direction:column;gap:8px}
+.fill{flex:1}
+.hi{font-family:var(--body);color:var(--muted);font-size:.88em;font-weight:400}
+.eyebrow{font-size:.66rem;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:grid;gap:6px}
+.note{font-size:.78rem;color:var(--muted)}
+.row-between{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.stitle{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.stitle h2{font-size:1.2rem}
+.stitle p{color:var(--muted);font-size:.8rem}
 
-main{flex:1;padding:16px 16px calc(96px + env(safe-area-inset-bottom,0px));display:block}
-.screen{display:grid;gap:14px}
-.screen-title{display:grid;gap:2px;padding-top:2px}
-.screen-title h2{font-size:1.4rem}
-.screen-title p{color:var(--muted);font-size:.9rem}
-.hi{font-family:var(--body);color:var(--muted);font-size:.9em;font-weight:400}
-.eyebrow{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:12px}
-.note{font-size:.82rem;color:var(--muted)}
+.btn{border:0;border-radius:10px;padding:8px 14px;font-weight:700;cursor:pointer;background:var(--accent-btn);color:#1E1A3A}
+.btn.ghost{background:var(--sunk);color:var(--ink);padding:6px 12px}
+.btn.block{width:100%;padding:10px}
+label{display:grid;gap:3px;font-weight:500;font-size:.82rem}
+input{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%;min-width:0}
 
-/* profile card on home */
-.who{display:flex;align-items:center;gap:12px}
-.who .av{width:46px;height:46px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--display);font-size:1.3rem;flex:none}
-.who .n{font-weight:700;font-size:1.05rem;line-height:1.2}
-.who .d{color:var(--muted);font-size:.88rem}
-.who button{margin-left:auto}
-.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:700;cursor:pointer;background:var(--accent-btn);color:#1E1A3A}
-.btn.ghost{background:var(--sunk);color:var(--ink)}
-.btn.block{width:100%;padding:12px}
-form{display:grid;gap:12px}
-label{display:grid;gap:4px;font-weight:500;font-size:.9rem}
-input{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:11px 12px;width:100%}
-
-.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.num{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 10px;display:grid;gap:2px;text-align:center;cursor:pointer}
+/* home */
+.who{display:flex;align-items:center;gap:10px}
+.who .av{width:38px;height:38px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--display);font-size:1.15rem;flex:none}
+.who .n{font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who .d{color:var(--muted);font-size:.8rem}
+.who > div:nth-child(2){min-width:0}
+.who button{margin-left:auto;flex:none}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.num{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 6px;display:grid;gap:0;text-align:center;cursor:pointer}
 .num.main{background:var(--accent-soft);border-color:transparent}
-.num .big{font-family:var(--display);font-size:2.6rem;line-height:1.05;color:var(--accent);font-variant-numeric:tabular-nums}
-.num .lbl{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
-.num .pl{font-size:.82rem;font-weight:700}
-.how{display:grid;gap:6px;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
-.how b{color:var(--ink);font-weight:500}
-
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:.82rem;font-weight:500}
+.num .big{font-family:var(--display);font-size:clamp(1.8rem,6.2vh,2.6rem);line-height:1.1;color:var(--accent)}
+.num .lbl{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.num .pl{font-size:.8rem;font-weight:700}
+.num .calc{font-size:.68rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:1px 9px;font-size:.76rem;font-weight:500;white-space:nowrap}
 .chip.good{background:var(--good-bg);color:var(--good)}
 .chip.warn{background:var(--warn-bg);color:var(--warn)}
 .chip.bad{background:var(--bad-bg);color:var(--bad)}
-.chip.teal{background:var(--teal-soft);color:var(--teal)}
+.harmtext{font-size:.86rem}
+.letters{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;padding-bottom:1px}
+.letters::-webkit-scrollbar{display:none}
+.letter{display:grid;text-align:center;min-width:22px;border:1px solid var(--line);border-radius:5px;padding:1px 3px;flex:none;line-height:1.15}
+.letter i{font-style:normal;font-weight:700;font-size:.78rem}
+.letter small{color:var(--accent);font-size:.7rem}
+.letter.gap{border:0;min-width:6px}
+.year{display:flex;gap:12px;align-items:center}
+.year .big{font-family:var(--display);font-size:clamp(1.8rem,5.5vh,2.4rem);color:var(--teal);line-height:1;flex:none;width:36px;text-align:center}
+.year p{font-size:.86rem}
 
-.letters{display:flex;flex-wrap:wrap;gap:4px}
-.letter{display:grid;text-align:center;min-width:28px;border:1px solid var(--line);border-radius:6px;padding:3px 5px;background:var(--surface)}
-.letter i{font-style:normal;font-weight:700;font-size:.9rem}
-.letter small{color:var(--accent);font-variant-numeric:tabular-nums}
-.letter.gap{border:0;background:transparent;min-width:8px}
-
-.year{display:flex;gap:14px;align-items:center}
-.year .big{font-family:var(--display);font-size:2.6rem;color:var(--teal);line-height:1}
-
-/* grid */
-.vgrid{display:grid;grid-template-columns:repeat(3,1fr);border:2px solid var(--ink);border-radius:8px;overflow:hidden;aspect-ratio:1;max-width:100%}
-.cell{border:1px solid var(--line);display:grid;place-items:center;align-content:center;gap:2px;padding:6px;text-align:center;background:var(--surface)}
-.cell .digits{font-family:var(--display);font-size:1.7rem;color:var(--accent);letter-spacing:.06em;font-variant-numeric:tabular-nums;line-height:1.2}
+@media (max-height:680px){#todayCard{display:none}}
+/* chakra */
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);border:2px solid var(--ink);border-radius:8px;overflow:hidden;aspect-ratio:1;width:min(100%,44vh);margin:0 auto}
+.cell{border:1px solid var(--line);display:grid;place-items:center;align-content:center;gap:0;padding:4px;text-align:center;background:var(--surface)}
+.cell .digits{font-family:var(--display);font-size:clamp(1.2rem,4.2vh,1.7rem);color:var(--accent);letter-spacing:.05em;line-height:1.15}
 .cell.empty{background:var(--sunk)}
 .cell.empty .digits{color:var(--line)}
-.cell .pl{font-size:.72rem;color:var(--muted);line-height:1.2}
+.cell .pl{font-size:.66rem;color:var(--muted);line-height:1.15}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center}
+.kv > span:nth-child(odd){font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
 
 /* graha */
-.picker{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
-.picker button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 0;font-family:var(--display);font-size:1.15rem;cursor:pointer;color:var(--ink)}
+.picker{display:grid;grid-template-columns:repeat(9,1fr);gap:3px}
+.picker button{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:3px 0;font-family:var(--display);font-size:1.05rem;cursor:pointer;color:var(--ink)}
 .picker button[aria-pressed="true"]{background:var(--accent-btn);border-color:transparent;color:#1E1A3A}
-.graha-head{display:flex;align-items:center;gap:14px}
-.graha-head .big{font-family:var(--display);font-size:3rem;line-height:1;color:var(--accent);width:56px;text-align:center}
-.graha-head h2{font-size:1.5rem}
-.facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0}
-.facts div{background:var(--surface);padding:10px 12px;display:grid;gap:1px}
-.facts dt{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.facts dd{margin:0;font-weight:500;font-size:.92rem}
-.mantra{background:var(--teal-soft);color:var(--teal);border-radius:12px;padding:14px;display:grid;gap:4px}
-.mantra .dev{font-size:1.2rem;font-weight:700;color:var(--ink)}
-.copy{justify-self:start;border:0;background:transparent;color:var(--teal);font-weight:700;padding:0;cursor:pointer;font-size:.85rem}
-ul.l{margin:4px 0 0;padding-left:18px}
+.graha-head{display:flex;align-items:center;gap:10px}
+.graha-head .big{font-family:var(--display);font-size:clamp(2rem,6vh,2.6rem);line-height:1;color:var(--accent);width:40px;text-align:center;flex:none}
+.graha-head h2{font-size:1.25rem}
+.graha-head p{font-size:.78rem;color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0}
+.facts div{background:var(--surface);padding:5px 8px;display:grid;gap:0;min-width:0}
+.facts dt{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font-weight:500;font-size:.8rem;line-height:1.2}
+.mantra{background:var(--teal-soft);color:var(--teal);border-radius:12px;padding:8px 12px;display:grid;gap:1px}
+.mantra .dev{font-size:1.02rem;font-weight:700;color:var(--ink);line-height:1.35}
+.mantra .rom{font-size:.8rem}
+.copy{border:0;background:transparent;color:var(--teal);font-weight:700;padding:0;cursor:pointer;font-size:.74rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.two h3{font-size:.95rem}
+ul.l{margin:2px 0 0;padding-left:16px;font-size:.8rem;line-height:1.3}
+ul.l li + li{margin-top:2px}
+.remedy{font-size:.84rem}
 
 /* milan */
-.compat{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
-.cmp{border-radius:10px;padding:8px 0;text-align:center;display:grid}
-.cmp b{font-family:var(--display);font-size:1.3rem;font-weight:400;line-height:1.1}
-.cmp span{font-size:.6rem}
+.form2{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end}
+.form2 .btn{grid-column:1/-1}
+.pair{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;text-align:center}
+.pair .big{font-family:var(--display);font-size:clamp(1.7rem,5vh,2.2rem);color:var(--accent);line-height:1}
+.pair .vs{font-size:1.2rem;color:var(--muted)}
+.meter{height:8px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.meter i{display:block;height:100%;border-radius:999px}
+.score{font-family:var(--display);font-size:1.5rem;line-height:1}
+.compat{display:grid;grid-template-columns:repeat(9,1fr);gap:3px}
+.cmp{border-radius:8px;padding:4px 0;text-align:center;display:grid}
+.cmp b{font-family:var(--display);font-size:1.15rem;font-weight:400;line-height:1.1}
+.cmp span{font-size:.56rem}
 .cmp.good{background:var(--good-bg);color:var(--good)}
 .cmp.warn{background:var(--warn-bg);color:var(--warn)}
 .cmp.bad{background:var(--bad-bg);color:var(--bad)}
-.pair{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center}
-.pair .big{font-family:var(--display);font-size:2.2rem;color:var(--accent);line-height:1}
-.pair .vs{font-size:1.4rem;color:var(--muted)}
-.meter{height:10px;border-radius:999px;background:var(--sunk);overflow:hidden}
-.meter i{display:block;height:100%;border-radius:999px;background:var(--good)}
-.score{font-family:var(--display);font-size:1.8rem;line-height:1}
 
 /* gyaan */
-.ref{display:grid;gap:8px}
-.ref .row{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;width:100%}
-.ref .row.me{background:var(--accent-soft);border-color:transparent}
-.ref .row b{font-family:var(--display);font-weight:400;font-size:1.6rem;color:var(--accent);line-height:1.1}
-.ref .row .t{font-weight:700}
-.ref .row .s{font-size:.82rem;color:var(--muted)}
-details{border-top:1px solid var(--line);padding-top:10px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.tile{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:6px 4px;cursor:pointer;display:grid;gap:0;text-align:center}
+.tile.me{background:var(--accent-soft);border-color:transparent}
+.tile b{font-family:var(--display);font-weight:400;font-size:1.5rem;color:var(--accent);line-height:1.1}
+.tile .t{font-weight:700;font-size:.8rem}
+.tile .s{font-size:.68rem;color:var(--muted)}
+details{border-top:1px solid var(--line);padding:6px 0}
 details:first-of-type{border-top:0;padding-top:0}
-summary{font-weight:700;cursor:pointer}
-details p{margin-top:6px;color:var(--muted);font-size:.92rem}
+summary{font-weight:700;cursor:pointer;font-size:.88rem}
+details p{margin-top:4px;color:var(--muted);font-size:.82rem}
 
 /* bottom nav */
-nav.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:6;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
-nav.tabs button{border:0;background:transparent;display:grid;justify-items:center;gap:2px;padding:6px 0;cursor:pointer;color:var(--muted);font-size:.72rem;font-weight:500;border-radius:10px}
-nav.tabs svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav.tabs{flex:none;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:4px 4px calc(4px + env(safe-area-inset-bottom,0px))}
+nav.tabs button{border:0;background:transparent;display:grid;justify-items:center;gap:1px;padding:4px 0;cursor:pointer;color:var(--muted);font-size:.68rem;font-weight:500}
+nav.tabs svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 nav.tabs button[aria-current="page"]{color:var(--accent)}
+nav.tabs .pill{padding:2px 14px;border-radius:999px;display:grid;place-items:center}
 nav.tabs button[aria-current="page"] .pill{background:var(--accent-soft)}
-nav.tabs .pill{padding:2px 16px;border-radius:999px;display:grid;place-items:center}
 
-.install{display:flex;align-items:center;gap:10px;background:var(--teal-soft);color:var(--teal);border-radius:14px;padding:10px 12px;font-size:.88rem}
-.install .btn{margin-left:auto;background:var(--teal);color:var(--surface)}
-@media (prefers-reduced-motion:no-preference){.screen{animation:in .18s ease-out}@keyframes in{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}}
+/* edit sheet */
+.scrim{position:absolute;inset:0;background:var(--scrim);z-index:10}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:11;background:var(--surface);border-radius:18px 18px 0 0;padding:14px 16px calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:10px}
+.sheet .grab{width:40px;height:4px;border-radius:4px;background:var(--line);justify-self:center}
+.sheet h2{font-size:1.2rem}
+.sheet form{display:grid;gap:10px}
+@media (prefers-reduced-motion:no-preference){.sheet{animation:up .2s ease-out}@keyframes up{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}}
 </style>
 </head>
 <body>
@@ -172,17 +188,13 @@ nav.tabs .pill{padding:2px 16px;border-radius:999px;display:grid;place-items:cen
       <h1 id="tb-title">Ank Jyotish</h1>
       <small id="tb-sub">अंक ज्योतिष · Vedic numerology</small>
     </div>
+    <button class="inst" id="installBtn" type="button" hidden>Install</button>
   </header>
 
   <main id="main">
     <!-- HOME -->
     <section class="screen" data-screen="home">
-      <div class="install" id="installBar" hidden>
-        <span>Install Ank Jyotish on your phone</span>
-        <button class="btn" id="installBtn" type="button">Install</button>
-      </div>
-
-      <div class="card" id="whoCard">
+      <div class="card">
         <div class="who">
           <div class="av" id="av">A</div>
           <div>
@@ -191,63 +203,42 @@ nav.tabs .pill{padding:2px 16px;border-radius:999px;display:grid;place-items:cen
           </div>
           <button class="btn ghost" id="editBtn" type="button">Edit</button>
         </div>
-        <form id="f" hidden>
-          <label for="name">Full name (as commonly used)
-            <input id="name" autocomplete="name" required>
-          </label>
-          <label for="dob">Date of birth
-            <input id="dob" type="date" required>
-          </label>
-          <button class="btn block" type="submit">Show my numbers</button>
-        </form>
-        <p class="note" id="sampleNote">This is an example person. Tap Edit and enter your own details. Everything stays on this device.</p>
       </div>
 
       <div class="trio">
-        <button class="num main" data-go="1" type="button"><span class="lbl">Moolank</span><span class="big" id="mNum"></span><span class="pl" id="mPl"></span></button>
-        <button class="num" data-go="2" type="button"><span class="lbl">Bhagyank</span><span class="big" id="bNum"></span><span class="pl" id="bPl"></span></button>
-        <button class="num" data-go="3" type="button"><span class="lbl">Namank</span><span class="big" id="nNum"></span><span class="pl" id="nPl"></span></button>
-      </div>
-
-      <div class="card">
-        <span class="eyebrow">How it was calculated</span>
-        <div class="how" id="how"></div>
+        <button class="num main" data-go="m" type="button"><span class="lbl">Moolank</span><span class="big" id="mNum"></span><span class="pl" id="mPl"></span><span class="calc" id="mCalc"></span></button>
+        <button class="num" data-go="b" type="button"><span class="lbl">Bhagyank</span><span class="big" id="bNum"></span><span class="pl" id="bPl"></span><span class="calc" id="bCalc"></span></button>
+        <button class="num" data-go="n" type="button"><span class="lbl">Namank</span><span class="big" id="nNum"></span><span class="pl" id="nPl"></span><span class="calc" id="nCalc"></span></button>
       </div>
 
       <div class="card">
         <span class="eyebrow">Name harmony · नाम मिलान</span>
         <div class="chips" id="harm"></div>
-        <p id="harmText"></p>
-        <div class="letters" id="letters"></div>
+        <p class="harmtext" id="harmText"></p>
+        <div class="letters" id="letters" aria-label="Letter values"></div>
       </div>
 
       <div class="card">
         <span class="eyebrow">Personal year <span id="py-year"></span> · व्यक्तिगत वर्ष</span>
         <div class="year"><div class="big" id="pyNum"></div><p id="pyText"></p></div>
       </div>
+
+      <div class="card" id="todayCard">
+        <span class="eyebrow">Your graha today</span>
+        <p class="harmtext" id="todayText"></p>
+      </div>
     </section>
 
-    <!-- GRID -->
+    <!-- CHAKRA -->
     <section class="screen" data-screen="grid" hidden>
-      <div class="screen-title">
-        <h2>Vedic grid <span class="hi">अंक चक्र</span></h2>
-        <p>Birth-date digits plus Moolank and Bhagyank, each in its graha's box.</p>
-      </div>
+      <div class="stitle"><h2>Vedic grid <span class="hi">अंक चक्र</span></h2><p>Birth digits + Moolank + Bhagyank</p></div>
       <div class="vgrid" id="vgrid"></div>
-      <div class="card">
-        <span class="eyebrow">Missing numbers</span>
-        <div class="chips" id="missing"></div>
-        <p class="note" id="missingNote"></p>
+      <div class="card kv">
+        <span>Missing</span><div class="chips" id="missing"></div>
+        <span id="repLbl">Repeated</span><div class="chips" id="repeated"></div>
+        <span>Planes</span><div class="chips" id="planes"></div>
       </div>
-      <div class="card" id="repCard">
-        <span class="eyebrow">Repeated numbers</span>
-        <div class="chips" id="repeated"></div>
-        <p class="note">Three or more of one number can push its qualities to excess.</p>
-      </div>
-      <div class="card">
-        <span class="eyebrow">Planes · रेखाएँ</span>
-        <div class="chips" id="planes"></div>
-      </div>
+      <p class="note" id="missingNote"></p>
     </section>
 
     <!-- GRAHA -->
@@ -255,43 +246,32 @@ nav.tabs .pill{padding:2px 16px;border-radius:999px;display:grid;place-items:cen
       <div class="picker" id="picker" role="group" aria-label="Choose a number"></div>
       <div class="graha-head">
         <div class="big" id="gNum"></div>
-        <div>
-          <h2 id="gName"></h2>
-          <p class="hi" id="gSub"></p>
-        </div>
+        <div><h2 id="gName"></h2><p id="gSub"></p></div>
       </div>
       <dl class="facts" id="gFacts"></dl>
       <div class="mantra">
-        <span class="eyebrow" style="color:inherit" id="gMantraLbl"></span>
+        <div class="row-between"><span class="eyebrow" style="color:inherit" id="gMantraLbl"></span><button class="copy" id="copyBtn" type="button">Copy</button></div>
         <div class="dev" id="gMantra"></div>
-        <div id="gMantraR"></div>
-        <button class="copy" id="copyBtn" type="button">Copy mantra</button>
+        <div class="rom" id="gMantraR"></div>
       </div>
-      <div class="card">
+      <div class="card two">
         <div><h3>Strengths</h3><ul class="l" id="gPlus"></ul></div>
         <div><h3>Watch for</h3><ul class="l" id="gMinus"></ul></div>
       </div>
       <div class="card">
         <span class="eyebrow">Upay · remedy</span>
-        <p id="gRemedy"></p>
+        <p class="remedy" id="gRemedy"></p>
         <p class="note" id="gDates"></p>
       </div>
     </section>
 
     <!-- MILAN -->
     <section class="screen" data-screen="milan" hidden>
-      <div class="screen-title">
-        <h2>Milan <span class="hi">मिलान</span></h2>
-        <p>Check number compatibility with a partner, friend or business associate.</p>
-      </div>
+      <div class="stitle"><h2>Milan <span class="hi">मिलान</span></h2><p>Partner, friend or business match</p></div>
       <div class="card">
-        <form id="pf">
-          <label for="pname">Their name
-            <input id="pname">
-          </label>
-          <label for="pdob">Their date of birth
-            <input id="pdob" type="date">
-          </label>
+        <form id="pf" class="form2">
+          <label for="pname">Their name<input id="pname"></label>
+          <label for="pdob">Their birth date<input id="pdob" type="date"></label>
           <button class="btn block" type="submit">Check match</button>
         </form>
       </div>
@@ -299,25 +279,21 @@ nav.tabs .pill{padding:2px 16px;border-radius:999px;display:grid;place-items:cen
       <div class="card">
         <span class="eyebrow">Your Moolank with each number</span>
         <div class="compat" id="compat"></div>
-        <div class="chips"><span class="chip good">Friendly · मित्र</span><span class="chip warn">Neutral · सम</span><span class="chip bad">Challenging · शत्रु</span></div>
+        <div class="chips"><span class="chip good">Friendly</span><span class="chip warn">Neutral</span><span class="chip bad">Challenging</span></div>
       </div>
     </section>
 
     <!-- GYAAN -->
     <section class="screen" data-screen="gyaan" hidden>
-      <div class="screen-title">
-        <h2>Gyaan <span class="hi">ज्ञान</span></h2>
-        <p>The nine numbers, their grahas, and how Ank Jyotish works.</p>
-      </div>
-      <div class="ref" id="ref"></div>
+      <div class="stitle"><h2>Gyaan <span class="hi">ज्ञान</span></h2><p>Tap a number to open its graha</p></div>
+      <div class="tiles" id="tiles"></div>
       <div class="card">
-        <details open><summary>Moolank · मूलांक</summary><p>Your birth day reduced to one digit. Born on the 23rd: 2 + 3 = 5. It describes your nature and how others see you.</p></details>
-        <details><summary>Bhagyank · भाग्यांक</summary><p>All digits of your full birth date added and reduced. It describes your destiny and the path life pushes you toward.</p></details>
-        <details><summary>Namank · नामांक</summary><p>Each letter of your name has a value (Chaldean system: A=1, B=2, C=3, D=4, E=5, F=8, G=3, H=5 …). The total is reduced to one digit. Names are often adjusted so this number is a friend of the Moolank and Bhagyank.</p></details>
-        <details><summary>Vedic grid · अंक चक्र</summary><p>A 3×3 chart laid out 3‑1‑9 / 6‑7‑5 / 2‑8‑4, one box per graha. Zeros are dropped. Missing numbers show qualities to develop, usually through that graha's remedy.</p></details>
-        <details><summary>A note on belief</summary><p>Ank Jyotish is a traditional practice. Use it for reflection, not for medical, financial or legal decisions. Graha friendships and remedies vary between teachers; this app follows the Parashari natural friendship table.</p></details>
+        <details><summary>Moolank · मूलांक</summary><p>Your birth day reduced to one digit. Born on the 23rd: 2 + 3 = 5. It describes your nature.</p></details>
+        <details><summary>Bhagyank · भाग्यांक</summary><p>All digits of the full birth date added and reduced. It describes your destiny.</p></details>
+        <details><summary>Namank · नामांक</summary><p>Letters carry Chaldean values (A=1, B=2, C=3, D=4, E=5, F=8 …). The total is reduced. Names are tuned so this is a friend of the Moolank.</p></details>
+        <details><summary>Vedic grid · अंक चक्र</summary><p>A 3×3 chart laid out 3‑1‑9 / 6‑7‑5 / 2‑8‑4. Zeros are dropped. Missing numbers show qualities to develop.</p></details>
+        <details><summary>A note on belief</summary><p>Ank Jyotish is a traditional practice. Use it for reflection, not for medical, financial or legal decisions. This app follows the Parashari natural friendship table. © Ikshana Solutions LLC</p></details>
       </div>
-      <p class="note" style="text-align:center">© Ikshana Solutions LLC</p>
     </section>
   </main>
 
@@ -328,39 +304,50 @@ nav.tabs .pill{padding:2px 16px;border-radius:999px;display:grid;place-items:cen
     <button type="button" data-tab="milan"><span class="pill"><svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span>Milan</button>
     <button type="button" data-tab="gyaan"><span class="pill"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7"/></svg></span>Gyaan</button>
   </nav>
+
+  <div class="scrim" id="scrim" hidden></div>
+  <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="grab"></div>
+    <h2 id="sheetTitle">Your details <span class="hi">जन्म विवरण</span></h2>
+    <form id="f">
+      <label for="name">Full name (as commonly used)<input id="name" autocomplete="name" required></label>
+      <label for="dob">Date of birth<input id="dob" type="date" required></label>
+      <button class="btn block" type="submit">Show my numbers</button>
+    </form>
+    <p class="note">Saved only on this device.</p>
+  </div>
 </div>
 
 <script>
 const P = {
-  1:{en:"Sun",hi:"सूर्य",tr:"Surya",day:"Sunday",dayhi:"रविवार",color:"Gold, orange, copper",gem:"Ruby (Manik)",metal:"Gold, copper",deity:"Surya Dev",dir:"East",mantra:"ॐ ह्रां ह्रीं ह्रौं सः सूर्याय नमः",mr:"Om Hraam Hreem Hraum Sah Suryaya Namah",
-     plus:["Natural leader, self-driven","Confident and dignified","Original thinker, likes to start things"],minus:["Can be proud or bossy","Dislikes taking orders","Ego clashes with authority"],
+  1:{en:"Sun",hi:"सूर्य",tr:"Surya",day:"Sunday",dayhi:"रविवार",color:"Gold, orange",gem:"Ruby (Manik)",metal:"Gold, copper",deity:"Surya Dev",dir:"East",mantra:"ॐ ह्रां ह्रीं ह्रौं सः सूर्याय नमः",mr:"Om Hraam Hreem Hraum Sah Suryaya Namah",
+     plus:["Natural leader","Confident, dignified","Original thinker"],minus:["Can be proud or bossy","Dislikes taking orders","Clashes with authority"],
      remedy:"Offer water (arghya) to the rising Sun on Sundays. Respect your father and elders."},
-  2:{en:"Moon",hi:"चन्द्र",tr:"Chandra",day:"Monday",dayhi:"सोमवार",color:"White, cream, silver",gem:"Pearl (Moti)",metal:"Silver",deity:"Shiva",dir:"North-west",mantra:"ॐ श्रां श्रीं श्रौं सः चन्द्राय नमः",mr:"Om Shraam Shreem Shraum Sah Chandraya Namah",
-     plus:["Gentle, caring, intuitive","Imaginative and artistic","Diplomatic, a good partner"],minus:["Moody and sensitive","Indecisive under pressure","Worries too much"],
+  2:{en:"Moon",hi:"चन्द्र",tr:"Chandra",day:"Monday",dayhi:"सोमवार",color:"White, silver",gem:"Pearl (Moti)",metal:"Silver",deity:"Shiva",dir:"North-west",mantra:"ॐ श्रां श्रीं श्रौं सः चन्द्राय नमः",mr:"Om Shraam Shreem Shraum Sah Chandraya Namah",
+     plus:["Gentle, intuitive","Imaginative, artistic","Diplomatic partner"],minus:["Moody, sensitive","Indecisive under pressure","Worries too much"],
      remedy:"Offer milk or water on a Shivling on Mondays. Keep a silver item with you."},
   3:{en:"Jupiter",hi:"गुरु",tr:"Guru",day:"Thursday",dayhi:"गुरुवार",color:"Yellow, saffron",gem:"Yellow sapphire (Pukhraj)",metal:"Gold",deity:"Vishnu",dir:"North-east",mantra:"ॐ ग्रां ग्रीं ग्रौं सः गुरवे नमः",mr:"Om Graam Greem Graum Sah Gurave Namah",
-     plus:["Wise, disciplined, a teacher","Honest and principled","Ambitious for knowledge"],minus:["Can lecture or moralise","Rigid about rules","Proud of being right"],
+     plus:["Wise, a teacher","Honest, principled","Loves knowledge"],minus:["Can lecture","Rigid about rules","Proud of being right"],
      remedy:"Apply a turmeric or saffron tilak on Thursdays. Donate chana dal or yellow items."},
-  4:{en:"Rahu",hi:"राहु",tr:"Rahu",day:"Saturday",dayhi:"शनिवार",color:"Grey, smoky blue",gem:"Hessonite (Gomed)",metal:"Lead, mixed metal",deity:"Durga",dir:"South-west",mantra:"ॐ भ्रां भ्रीं भ्रौं सः राहवे नमः",mr:"Om Bhraam Bhreem Bhraum Sah Rahave Namah",
-     plus:["Unconventional, sees what others miss","Hard-working and methodical","Good with technology and systems"],minus:["Sudden ups and downs","Rebellious, argumentative","Few close friends"],
-     remedy:"Feed birds or stray dogs. Recite Durga Chalisa. Avoid shortcuts in money matters."},
+  4:{en:"Rahu",hi:"राहु",tr:"Rahu",day:"Saturday",dayhi:"शनिवार",color:"Grey, smoky blue",gem:"Hessonite (Gomed)",metal:"Mixed metal",deity:"Durga",dir:"South-west",mantra:"ॐ भ्रां भ्रीं भ्रौं सः राहवे नमः",mr:"Om Bhraam Bhreem Bhraum Sah Rahave Namah",
+     plus:["Unconventional","Hard-working, methodical","Good with technology"],minus:["Sudden ups and downs","Argumentative","Few close friends"],
+     remedy:"Feed birds or stray dogs. Recite Durga Chalisa. Avoid shortcuts with money."},
   5:{en:"Mercury",hi:"बुध",tr:"Budh",day:"Wednesday",dayhi:"बुधवार",color:"Green",gem:"Emerald (Panna)",metal:"Bronze",deity:"Ganesha",dir:"North",mantra:"ॐ ब्रां ब्रीं ब्रौं सः बुधाय नमः",mr:"Om Braam Breem Braum Sah Budhaya Namah",
-     plus:["Quick mind, good communicator","Business sense, adaptable","Witty and youthful"],minus:["Restless, easily bored","Nervous energy","Can scatter effort"],
+     plus:["Quick communicator","Business sense","Witty, youthful"],minus:["Restless, easily bored","Nervous energy","Scatters effort"],
      remedy:"Offer durva grass to Ganesha on Wednesdays. Feed green fodder to cows."},
-  6:{en:"Venus",hi:"शुक्र",tr:"Shukra",day:"Friday",dayhi:"शुक्रवार",color:"White, pink, light blue",gem:"Diamond (Heera) or white sapphire",metal:"Silver, platinum",deity:"Lakshmi",dir:"South-east",mantra:"ॐ द्रां द्रीं द्रौं सः शुक्राय नमः",mr:"Om Draam Dreem Draum Sah Shukraya Namah",
-     plus:["Charming, loves beauty and art","Family-oriented, loyal","Draws comfort and wealth"],minus:["Fond of luxury","Can be vain or possessive","Avoids hard conflict"],
+  6:{en:"Venus",hi:"शुक्र",tr:"Shukra",day:"Friday",dayhi:"शुक्रवार",color:"White, pink",gem:"Diamond (Heera)",metal:"Silver, platinum",deity:"Lakshmi",dir:"South-east",mantra:"ॐ द्रां द्रीं द्रौं सः शुक्राय नमः",mr:"Om Draam Dreem Draum Sah Shukraya Namah",
+     plus:["Charming, artistic","Loyal to family","Draws comfort, wealth"],minus:["Fond of luxury","Can be possessive","Avoids conflict"],
      remedy:"Worship Lakshmi on Fridays. Wear clean, fragrant clothes. Donate white sweets."},
-  7:{en:"Ketu",hi:"केतु",tr:"Ketu",day:"Tuesday",dayhi:"मंगलवार",color:"Smoky grey, multicolour",gem:"Cat's eye (Lehsuniya)",metal:"Mixed metal",deity:"Ganesha",dir:"—",mantra:"ॐ स्रां स्रीं स्रौं सः केतवे नमः",mr:"Om Sraam Sreem Sraum Sah Ketave Namah",
-     plus:["Spiritual and intuitive","Researcher, goes deep","Independent thinker"],minus:["Detached or secretive","Doubts own path","Restless, likes to travel"],
+  7:{en:"Ketu",hi:"केतु",tr:"Ketu",day:"Tuesday",dayhi:"मंगलवार",color:"Smoky grey",gem:"Cat's eye (Lehsuniya)",metal:"Mixed metal",deity:"Ganesha",dir:"—",mantra:"ॐ स्रां स्रीं स्रौं सः केतवे नमः",mr:"Om Sraam Sreem Sraum Sah Ketave Namah",
+     plus:["Spiritual, intuitive","Deep researcher","Independent thinker"],minus:["Detached, secretive","Doubts own path","Restless"],
      remedy:"Worship Ganesha. Donate a blanket to someone in need."},
-  8:{en:"Saturn",hi:"शनि",tr:"Shani",day:"Saturday",dayhi:"शनिवार",color:"Black, dark blue",gem:"Blue sapphire (Neelam), test before wearing",metal:"Iron",deity:"Hanuman, Shani Dev",dir:"West",mantra:"ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः",mr:"Om Praam Preem Praum Sah Shanaishcharaya Namah",
-     plus:["Patient, serious, reliable","Builds slowly and lasts","Strong sense of justice"],minus:["Delays and heavy responsibility","Can feel lonely or misunderstood","Pessimistic phases"],
-     remedy:"Light a mustard-oil lamp under a peepal tree on Saturdays. Recite Hanuman Chalisa. Help workers and the elderly."},
+  8:{en:"Saturn",hi:"शनि",tr:"Shani",day:"Saturday",dayhi:"शनिवार",color:"Black, dark blue",gem:"Blue sapphire (Neelam)",metal:"Iron",deity:"Hanuman",dir:"West",mantra:"ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः",mr:"Om Praam Preem Praum Sah Shanaishcharaya Namah",
+     plus:["Patient, reliable","Builds to last","Sense of justice"],minus:["Delays, heavy duties","Feels misunderstood","Pessimistic phases"],
+     remedy:"Light a mustard-oil lamp under a peepal tree on Saturdays. Recite Hanuman Chalisa."},
   9:{en:"Mars",hi:"मंगल",tr:"Mangal",day:"Tuesday",dayhi:"मंगलवार",color:"Red, maroon",gem:"Red coral (Moonga)",metal:"Copper",deity:"Hanuman",dir:"South",mantra:"ॐ क्रां क्रीं क्रौं सः भौमाय नमः",mr:"Om Kraam Kreem Kraum Sah Bhaumaya Namah",
-     plus:["Brave, energetic, protective","Direct and action-oriented","Finishes what it starts"],minus:["Quick temper","Impatient","Accident-prone when rushed"],
-     remedy:"Recite Hanuman Chalisa on Tuesdays. Donate red lentils (masoor dal). Channel energy into exercise."}
+     plus:["Brave, energetic","Direct, protective","Finishes tasks"],minus:["Quick temper","Impatient","Rushes into risk"],
+     remedy:"Recite Hanuman Chalisa on Tuesdays. Donate red lentils (masoor dal)."}
 };
-// Naisargika maitri (natural friendship) mapped to numbers
 const REL = {
   1:{f:[2,9,3],n:[5],e:[6,8,4,7]}, 2:{f:[1,5],n:[9,3,6,8,4,7],e:[]}, 3:{f:[1,2,9],n:[8,4,7],e:[5,6]},
   4:{f:[5,6,8],n:[3],e:[1,2,9]}, 5:{f:[1,6],n:[9,3,8,4,7],e:[2]}, 6:{f:[5,8,4,7],n:[9,3],e:[1,2]},
@@ -368,16 +355,17 @@ const REL = {
 };
 const CH = {A:1,I:1,J:1,Q:1,Y:1,B:2,K:2,R:2,C:3,G:3,L:3,S:3,D:4,M:4,T:4,E:5,H:5,N:5,X:5,U:6,V:6,W:6,O:7,Z:7,F:8,P:8};
 const GRID = [3,1,9,6,7,5,2,8,4];
+const DAYRULER = [1,2,9,5,3,6,8]; // Sun..Sat
 const YEAR = {
-  1:"New beginnings. Start the project, take the job, plant the seed.",
-  2:"A slower year for partnerships and patience. Cooperate rather than push.",
-  3:"Learning, growth and expression. Good for study and teaching.",
-  4:"Hard work and foundations. Expect effort and some surprises.",
+  1:"New beginnings. Start the project, plant the seed.",
+  2:"Partnerships and patience. Cooperate, don't push.",
+  3:"Learning and growth. Good for study and teaching.",
+  4:"Hard work and foundations. Expect some surprises.",
   5:"Change, travel and movement. Stay flexible.",
-  6:"Home, family and responsibility. Good for marriage and property.",
-  7:"Reflection and inner work. Research, rest, spiritual practice.",
+  6:"Home, family and duty. Good for marriage and property.",
+  7:"Reflection and inner work. Rest and spiritual practice.",
   8:"Karma and results. Discipline pays; shortcuts cost.",
-  9:"Completion. Finish, let go and clear space for the next cycle."
+  9:"Completion. Finish, let go, clear space."
 };
 const relWord = {good:"Friendly",warn:"Neutral",bad:"Challenging"};
 const SAMPLE = {name:"Aarav Sharma", dob:"1990-08-14"};
@@ -386,9 +374,8 @@ const $ = id => document.getElementById(id);
 const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const digitsum = s => String(s).replace(/\D/g,"").split("").reduce((a,d)=>a+ +d,0);
 const reduce = n => { while(n>9) n = digitsum(n); return n; };
-const chain = n => { const o=[n]; while(n>9){ n=digitsum(n); o.push(n);} return o.join(" → "); };
+const chain = n => { const o=[n]; while(n>9){ n=digitsum(n); o.push(n);} return o.join("→"); };
 const relation = (a,b) => a===b ? "good" : REL[a].f.includes(b) ? "good" : REL[a].e.includes(b) ? "bad" : "warn";
-
 function store(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
 function load(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
 
@@ -409,45 +396,37 @@ function calc(name,dob){
 }
 
 let me = load("ank.me") || SAMPLE;
-let R = null;
-let grahaSel = null;
+let R = null, grahaSel = null;
 
 function fmtDate(dob){
   const [y,m,d] = dob.split("-").map(Number);
-  return new Date(y,m-1,d).toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"});
+  return new Date(y,m-1,d).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"});
 }
 
 function renderAll(){
   R = calc(me.name, me.dob);
   const isSample = me.name===SAMPLE.name && me.dob===SAMPLE.dob;
-  $("sampleNote").hidden = !isSample;
   $("whoName").textContent = me.name;
-  $("whoDob").textContent = "Born " + fmtDate(me.dob);
+  $("whoDob").textContent = isSample ? "Example profile · tap Edit to add yours" : "Born " + fmtDate(me.dob);
+  $("editBtn").textContent = isSample ? "Add mine" : "Edit";
   $("av").textContent = (me.name.trim()[0]||"?").toUpperCase();
-  $("name").value = me.name; $("dob").value = me.dob;
 
   $("mNum").textContent = R.moolank; $("mPl").textContent = P[R.moolank].tr;
+  $("mCalc").textContent = R.day>9 ? `day ${R.day}→${R.moolank}` : `day ${R.day}`;
   $("bNum").textContent = R.bhagyank; $("bPl").textContent = P[R.bhagyank].tr;
+  $("bCalc").textContent = `date sum ${chain(R.allSum)}`;
   $("nNum").textContent = R.namank ?? "–"; $("nPl").textContent = R.namank ? P[R.namank].tr : "—";
-  document.querySelector('[data-go="3"]').dataset.n = R.namank || "";
-  document.querySelector('[data-go="1"]').dataset.n = R.moolank;
-  document.querySelector('[data-go="2"]').dataset.n = R.bhagyank;
+  $("nCalc").textContent = R.namank ? `letters ${chain(R.nameTotal)}` : "add a name";
 
-  $("how").innerHTML = `
-    <div><b>Moolank:</b> birth day ${R.day}${R.day>9?` → ${String(R.day).split("").join(" + ")} = ${R.moolank}`:""}</div>
-    <div><b>Bhagyank:</b> ${(R.d+R.m+R.y).split("").join("+")} = ${chain(R.allSum)}</div>
-    <div><b>Namank:</b> ${R.namank?`letter total ${chain(R.nameTotal)}`:"enter a name in English letters"}</div>`;
-
-  // harmony
   const mb = relation(R.moolank,R.bhagyank);
-  let h = `<span class="chip ${mb}">Moolank ↔ Bhagyank: ${relWord[mb]}</span>`;
+  let h = `<span class="chip ${mb}">M↔B ${relWord[mb]}</span>`;
   if(R.namank){
     const mn = relation(R.moolank,R.namank), bn = relation(R.bhagyank,R.namank);
-    h += `<span class="chip ${mn}">Moolank ↔ Namank: ${relWord[mn]}</span><span class="chip ${bn}">Bhagyank ↔ Namank: ${relWord[bn]}</span>`;
+    h += `<span class="chip ${mn}">M↔N ${relWord[mn]}</span><span class="chip ${bn}">B↔N ${relWord[bn]}</span>`;
     const friends = [...new Set([R.moolank,...REL[R.moolank].f])].sort().join(", ");
     $("harmText").innerHTML = (mn==="good" && bn!=="bad")
-      ? `<strong>Your name supports you.</strong> Namank ${R.namank} (${P[R.namank].tr}) sits well with your birth numbers.`
-      : `<strong>Your name could be tuned.</strong> Numerologists suggest a spelling whose total reduces to a friendly number. For Moolank ${R.moolank} those are ${friends}.`;
+      ? `<strong>Your name supports you.</strong> Namank ${R.namank} sits well with your birth numbers.`
+      : `<strong>Name could be tuned.</strong> Aim for a spelling that totals ${friends}.`;
   } else $("harmText").textContent = "";
   $("harm").innerHTML = h;
   $("letters").innerHTML = R.lv.map(l => l.v ? `<span class="letter"><i>${esc(l.ch)}</i><small>${l.v}</small></span>` : (l.ch===" "?`<span class="letter gap"></span>`:"")).join("");
@@ -456,23 +435,26 @@ function renderAll(){
   $("pyNum").textContent = R.pYear;
   $("pyText").textContent = YEAR[R.pYear];
 
-  // grid
-  $("vgrid").innerHTML = GRID.map(n=>`<div class="cell ${R.counts[n]?"":"empty"}"><div class="digits">${R.counts[n]?String(n).repeat(R.counts[n]):n}</div><div class="pl">${P[n].tr}<br>${P[n].hi}</div></div>`).join("");
+  const now = new Date(), tr = DAYRULER[now.getDay()], rel = relation(R.moolank, tr);
+  $("todayText").innerHTML = `${now.toLocaleDateString(undefined,{weekday:"long"})} is ruled by <strong>${P[tr].tr}</strong> (${tr}), <span class="chip ${rel}">${relWord[rel].toLowerCase()}</span> to your Moolank ${R.moolank}. Your best day is ${P[R.moolank].day}.`;
+
+  // chakra
+  $("vgrid").innerHTML = GRID.map(n=>`<div class="cell ${R.counts[n]?"":"empty"}"><div class="digits">${R.counts[n]?String(n).repeat(R.counts[n]):n}</div><div class="pl">${P[n].tr} · ${P[n].hi}</div></div>`).join("");
   const missing = GRID.filter(n=>!R.counts[n]).sort();
   const repeated = GRID.filter(n=>R.counts[n]>=3).sort();
-  $("missing").innerHTML = missing.length ? missing.map(n=>`<span class="chip bad">${n} · ${P[n].tr}</span>`).join("") : `<span class="chip good">None missing</span>`;
-  $("missingNote").textContent = missing.length ? `Missing numbers are traditionally balanced through their graha's remedy. Open the Graha tab and pick ${missing.join(", ")} to see each one.` : "";
-  $("repCard").hidden = !repeated.length;
-  $("repeated").innerHTML = repeated.map(n=>`<span class="chip warn">${n} × ${R.counts[n]} · ${P[n].tr}</span>`).join("");
+  $("missing").innerHTML = missing.length ? missing.map(n=>`<span class="chip bad">${n} ${P[n].tr}</span>`).join("") : `<span class="chip good">None</span>`;
+  $("repeated").innerHTML = repeated.length ? repeated.map(n=>`<span class="chip warn">${n}×${R.counts[n]} ${P[n].tr}</span>`).join("") : `<span class="chip good">None</span>`;
   const planes = [["Mental",[3,1,9]],["Emotional",[6,7,5]],["Practical",[2,8,4]],["Thought",[3,6,2]],["Will",[1,7,8]],["Action",[9,5,4]],["Success",[3,7,4]],["Golden",[9,7,2]]];
-  $("planes").innerHTML = planes.map(([nm,s])=>{const full=s.every(x=>R.counts[x]);return `<span class="chip ${full?"good":"warn"}">${full?"✓":"○"} ${nm} ${s.join("·")}</span>`}).join("");
+  const full = planes.filter(([,s])=>s.every(x=>R.counts[x]));
+  $("planes").innerHTML = full.length ? full.map(([nm,s])=>`<span class="chip good">✓ ${nm} ${s.join("")}</span>`).join("") : `<span class="chip warn">None complete</span>`;
+  $("missingNote").textContent = missing.length ? `Missing numbers are balanced through their graha's remedy. Open Graha and pick ${missing.join(", ")}.` : "Every graha is present in your grid.";
 
   // milan
   $("compat").innerHTML = [1,2,3,4,5,6,7,8,9].map(n=>{const c=relation(R.moolank,n);return `<div class="cmp ${c}"><b>${n}</b><span>${P[n].tr}</span></div>`}).join("");
   renderMatch();
 
   // gyaan
-  $("ref").innerHTML = [1,2,3,4,5,6,7,8,9].map(n=>`<button type="button" class="row ${n===R.moolank?"me":""}" data-n="${n}"><b>${n}</b><span><span class="t">${P[n].tr} <span class="hi">${P[n].hi} · ${P[n].en}</span></span><br><span class="s">${P[n].day} · ${P[n].gem} · ${P[n].color}</span></span></button>`).join("");
+  $("tiles").innerHTML = [1,2,3,4,5,6,7,8,9].map(n=>`<button type="button" class="tile ${n===R.moolank?"me":""}" data-n="${n}"><b>${n}</b><span class="t">${P[n].tr} <span class="hi">${P[n].hi}</span></span><span class="s">${P[n].day}</span></button>`).join("");
 
   if(grahaSel===null) grahaSel = R.moolank;
   renderGraha();
@@ -482,93 +464,95 @@ function renderGraha(){
   const n = grahaSel, p = P[n];
   $("picker").innerHTML = [1,2,3,4,5,6,7,8,9].map(i=>`<button type="button" data-n="${i}" aria-pressed="${i===n}">${i}</button>`).join("");
   $("gNum").textContent = n;
-  $("gName").innerHTML = `${p.tr} <span class="hi">${p.hi}</span>`;
+  $("gName").innerHTML = `${p.tr} <span class="hi">${p.hi} · ${p.en}</span>`;
   const tags = [];
   if(n===R.moolank) tags.push("your Moolank");
   if(n===R.bhagyank) tags.push("your Bhagyank");
   if(n===R.namank) tags.push("your Namank");
   if(!R.counts[n]) tags.push("missing in your grid");
-  $("gSub").textContent = p.en + (tags.length ? " · " + tags.join(", ") : "");
-  $("gFacts").innerHTML = [["Day",`${p.day} · ${p.dayhi}`],["Colour",p.color],["Ratna",p.gem],["Metal",p.metal],["Devta",p.deity],["Direction",p.dir]]
+  $("gSub").textContent = tags.length ? tags.join(" · ") : "Not in your core numbers";
+  $("gFacts").innerHTML = [["Day",`${p.day}`],["Colour",p.color],["Ratna",p.gem],["Metal",p.metal],["Devta",p.deity],["Direction",p.dir]]
     .map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
-  $("gMantraLbl").textContent = `Beej mantra · 108 times on ${p.day}`;
+  $("gMantraLbl").textContent = `Beej mantra · 108× on ${p.day}`;
   $("gMantra").textContent = p.mantra;
   $("gMantraR").textContent = p.mr;
-  $("copyBtn").textContent = "Copy mantra";
+  $("copyBtn").textContent = "Copy";
   $("gPlus").innerHTML = p.plus.map(x=>`<li>${x}</li>`).join("");
   $("gMinus").innerHTML = p.minus.map(x=>`<li>${x}</li>`).join("");
   $("gRemedy").textContent = p.remedy;
-  $("gDates").textContent = `Dates ruled by ${n}: ` + [n,n+9,n+18,n+27].filter(x=>x<=31).join(", ") + " of every month.";
+  $("gDates").textContent = `Lucky dates: ` + [n,n+9,n+18,n+27].filter(x=>x<=31).join(", ") + " of every month";
 }
 
 function renderMatch(){
   const pd = $("pdob").value, pn = $("pname").value.trim() || "Them";
   const box = $("matchCard");
-  if(!pd){ box.innerHTML = `<span class="eyebrow">Result</span><p class="note">Enter their date of birth to see how your numbers match.</p>`; return; }
+  if(!pd){ box.innerHTML = `<span class="eyebrow">Result</span><p class="note">Enter their birth date to see how your numbers match.</p>`; return; }
   const Q = calc(pn, pd);
   const r1 = relation(R.moolank,Q.moolank), r2 = relation(Q.moolank,R.moolank), r3 = relation(R.bhagyank,Q.bhagyank);
   const pts = {good:2,warn:1,bad:0};
   const score = Math.round((pts[r1]+pts[r2]+pts[r3])/6*100);
+  const tone = score>=80?"good":score>=50?"warn":"bad";
   const verdict = score>=80?"Strong match":score>=50?"Workable match":"Needs effort";
   box.innerHTML = `
     <div class="pair">
       <div><div class="big">${R.moolank}</div><div class="note">${esc(me.name.split(" ")[0])} · ${P[R.moolank].tr}</div></div>
-      <div class="vs">↔</div>
+      <div><div class="score">${score}%</div><div class="note">${verdict}</div></div>
       <div><div class="big">${Q.moolank}</div><div class="note">${esc(pn.split(" ")[0])} · ${P[Q.moolank].tr}</div></div>
     </div>
-    <div style="display:flex;align-items:baseline;gap:10px"><span class="score">${score}%</span><strong>${verdict}</strong></div>
-    <div class="meter"><i style="width:${score}%;background:var(--${score>=80?"good":score>=50?"warn":"bad"})"></i></div>
+    <div class="meter"><i style="width:${Math.max(score,4)}%;background:var(--${tone})"></i></div>
     <div class="chips">
-      <span class="chip ${r1}">Your ${R.moolank} → their ${Q.moolank}: ${relWord[r1]}</span>
-      <span class="chip ${r2}">Their ${Q.moolank} → your ${R.moolank}: ${relWord[r2]}</span>
-      <span class="chip ${r3}">Bhagyank ${R.bhagyank} & ${Q.bhagyank}: ${relWord[r3]}</span>
-    </div>
-    <p class="note">Graha friendship is not always mutual, so both directions are shown.</p>`;
+      <span class="chip ${r1}">You→them ${relWord[r1]}</span>
+      <span class="chip ${r2}">Them→you ${relWord[r2]}</span>
+      <span class="chip ${r3}">Bhagyank ${relWord[r3]}</span>
+    </div>`;
 }
 
 // navigation
 const titles = {home:["Ank Jyotish","अंक ज्योतिष · Vedic numerology"],grid:["Chakra","Vedic grid"],graha:["Graha","Planet, mantra and remedy"],milan:["Milan","Compatibility"],gyaan:["Gyaan","Learn the system"]};
-function go(tab, push=true){
+function go(tab){
   document.querySelectorAll("[data-screen]").forEach(s=>s.hidden = s.dataset.screen!==tab);
   document.querySelectorAll("[data-tab]").forEach(b=>{ if(b.dataset.tab===tab) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
   $("tb-title").textContent = titles[tab][0]; $("tb-sub").textContent = titles[tab][1];
-  window.scrollTo(0,0);
-  if(push){ try{ history.replaceState(null,"","#"+tab); }catch(e){} }
+  $("main").scrollTop = 0;
+  try{ history.replaceState(null,"","#"+tab); }catch(e){}
 }
 document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.tab)));
-document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{ const n=+b.dataset.n; if(n){ grahaSel=n; renderGraha(); go("graha"); } }));
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{
+  const n = {m:R.moolank,b:R.bhagyank,n:R.namank}[b.dataset.go]; if(n){ grahaSel=n; renderGraha(); go("graha"); }
+}));
 $("picker").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; grahaSel=+b.dataset.n; renderGraha(); });
-$("ref").addEventListener("click",e=>{ const b=e.target.closest(".row"); if(!b) return; grahaSel=+b.dataset.n; renderGraha(); go("graha"); });
+$("tiles").addEventListener("click",e=>{ const b=e.target.closest(".tile"); if(!b) return; grahaSel=+b.dataset.n; renderGraha(); go("graha"); });
 
-$("editBtn").addEventListener("click",()=>{ const f=$("f"); f.hidden=!f.hidden; $("editBtn").textContent=f.hidden?"Edit":"Close"; if(!f.hidden) $("name").focus(); });
+// edit sheet
+function openSheet(){ $("name").value=me.name; $("dob").value=me.dob; $("scrim").hidden=false; $("sheet").hidden=false; setTimeout(()=>$("name").focus(),50); }
+function closeSheet(){ $("scrim").hidden=true; $("sheet").hidden=true; }
+$("editBtn").addEventListener("click",openSheet);
+$("scrim").addEventListener("click",closeSheet);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
 $("f").addEventListener("submit",e=>{
   e.preventDefault();
   const name=$("name").value.trim(), dob=$("dob").value;
   if(!name||!dob) return;
-  me={name,dob}; store("ank.me",me); grahaSel=null;
-  $("f").hidden=true; $("editBtn").textContent="Edit";
-  renderAll();
+  me={name,dob}; store("ank.me",me); grahaSel=null; closeSheet(); renderAll(); go("home");
 });
 $("pf").addEventListener("submit",e=>{ e.preventDefault(); renderMatch(); store("ank.partner",{name:$("pname").value,dob:$("pdob").value}); });
 $("copyBtn").addEventListener("click",()=>{
   const t = P[grahaSel].mantra + "\n" + P[grahaSel].mr;
-  const done = ()=>{ $("copyBtn").textContent="Copied"; };
-  try{ navigator.clipboard.writeText(t).then(done,()=>{}); }catch(e){}
+  try{ navigator.clipboard.writeText(t).then(()=>{ $("copyBtn").textContent="Copied"; },()=>{}); }catch(e){}
 });
 
-// install prompt (Android / desktop Chrome)
+// install (Android / desktop Chrome)
 let deferred = null;
-window.addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferred=e; $("installBar").hidden=false; });
-$("installBtn").addEventListener("click",async()=>{ if(!deferred) return; deferred.prompt(); await deferred.userChoice; deferred=null; $("installBar").hidden=true; });
-window.addEventListener("appinstalled",()=>{ $("installBar").hidden=true; });
-
+window.addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferred=e; $("installBtn").hidden=false; });
+$("installBtn").addEventListener("click",async()=>{ if(!deferred) return; deferred.prompt(); await deferred.userChoice; deferred=null; $("installBtn").hidden=true; });
+window.addEventListener("appinstalled",()=>{ $("installBtn").hidden=true; });
 if("serviceWorker" in navigator && location.protocol==="https:"){ navigator.serviceWorker.register("sw.js").catch(()=>{}); }
 
 const partner = load("ank.partner");
 if(partner){ $("pname").value = partner.name||""; $("pdob").value = partner.dob||""; }
 renderAll();
 const start = (location.hash||"").slice(1);
-go(titles[start] ? start : "home", false);
+go(titles[start] ? start : "home");
 </script>
 </body>
 </html>
