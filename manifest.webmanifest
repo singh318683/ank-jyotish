@@ -1,0 +1,16 @@
+{
+  "name": "Ank Jyotish",
+  "short_name": "Ank Jyotish",
+  "description": "Vedic numerology: Moolank, Bhagyank, Namank, Vedic grid, graha remedies and compatibility.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1E1A3A",
+  "theme_color": "#1E1A3A",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -8,7 +8,13 @@ A Vedic numerology web app. Enter a name and date of birth to get:
 - Ruling graha profile: day, colour, ratna, metal, devta, direction, beej mantra, remedies
 - Compatibility with Moolanks 1–9 and the personal year number
 
-Plain HTML, CSS and JavaScript in one file. No build step.
+## App view
+
+Mobile-first app layout with five tabs: **Ank** (your numbers), **Chakra** (Vedic grid), **Graha** (planet, mantra, remedy), **Milan** (compatibility) and **Gyaan** (reference).
+
+It is an installable web app (PWA): on Android, tap **Install** in the app or use Chrome's menu → *Add to Home screen*. On iPhone, open in Safari → Share → *Add to Home Screen*. It opens full-screen with its own icon and works offline after the first visit.
+
+Plain HTML, CSS and JavaScript. No build step.
 
 ## Deploy on Vercel
 

@@ -3,387 +3,572 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Ank Jyotish: Vedic numerology calculator for Moolank, Bhagyank, Namank, the Vedic grid, graha remedies and compatibility.">
-<meta name="theme-color" content="#1E1A3A">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <title>Ank Jyotish</title>
+<meta name="description" content="Ank Jyotish: Vedic numerology. Moolank, Bhagyank, Namank, Vedic grid, graha remedies and compatibility.">
+<meta name="theme-color" content="#1E1A3A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ank Jyotish">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Mukta:wght@400;500;700&display=swap">
 <style>
 :root{
+  color-scheme:light;
   --bg:#F4F2FA; --surface:#FFFFFF; --sunk:#ECE8F6; --ink:#1E1A3A; --muted:#5E587A; --line:#DAD4EA;
-  --accent:#C96F00; --accent-soft:#FBEBD3; --teal:#0F6E75; --teal-soft:#DDF0EF;
+  --bar:#1E1A3A; --bar-ink:#F4F2FA; --bar-muted:#A79FC6;
+  --accent:#C96F00; --accent-ink:#1E1A3A; --accent-btn:#E8900F; --accent-soft:#FBEBD3; --teal:#0F6E75; --teal-soft:#DDF0EF;
   --good:#1E7A45; --good-bg:#DDF2E4; --warn:#8A6400; --warn-bg:#F7EDCC; --bad:#A3302A; --bad-bg:#F8DEDB;
+  --outside:#E4E0F0;
   --display:"Yatra One","Mukta",Georgia,serif; --body:"Mukta",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+@media (prefers-color-scheme:dark){:root{
   color-scheme:dark;
   --bg:#110E22; --surface:#1B1733; --sunk:#241F40; --ink:#EDE9F7; --muted:#A79FC6; --line:#342D55;
-  --accent:#F2A93B; --accent-soft:#3A2A12; --teal:#5CC6C9; --teal-soft:#15333A;
+  --bar:#0B0918; --bar-ink:#EDE9F7; --bar-muted:#8A82AC;
+  --accent:#F2A93B; --accent-btn:#F2A93B; --accent-soft:#3A2A12; --teal:#5CC6C9; --teal-soft:#15333A;
   --good:#6FD39A; --good-bg:#15332A; --warn:#E8C45A; --warn-bg:#3A3015; --bad:#F08A80; --bad-bg:#3D1E1E;
+  --outside:#07060F;
 }}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --bg:#110E22; --surface:#1B1733; --sunk:#241F40; --ink:#EDE9F7; --muted:#A79FC6; --line:#342D55;
-  --accent:#F2A93B; --accent-soft:#3A2A12; --teal:#5CC6C9; --teal-soft:#15333A;
-  --good:#6FD39A; --good-bg:#15332A; --warn:#E8C45A; --warn-bg:#3A3015; --bad:#F08A80; --bad-bg:#3D1E1E;
-}
-*{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;padding-inline:16px;padding-block:24px 48px}
-.wrap{max-width:1080px;margin:0 auto;display:grid;gap:24px}
-h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;line-height:1.2}
-h1{font-size:clamp(2rem,5vw,2.8rem)}
-h2{font-size:1.45rem}
-h3{font-size:1.15rem}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--outside);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.2;text-wrap:balance}
 p{margin:0}
-.eyebrow{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
-.hi{font-family:var(--body);color:var(--muted);font-size:.95em}
-header{display:grid;gap:6px}
-header p{color:var(--muted);max-width:62ch}
-.layout{display:grid;grid-template-columns:320px 1fr;gap:24px;align-items:start}
-@media (max-width:820px){.layout{grid-template-columns:1fr}}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:16px}
-form{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px)}
-@media (max-width:820px){form{position:static}}
-label{display:grid;gap:4px;font-weight:500;font-size:.92rem}
-input{font:inherit;color:var(--ink);background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%}
-input:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-button{font:inherit;font-weight:700;cursor:pointer;border:0;border-radius:8px;padding:11px 14px;background:var(--accent);color:#1E1A3A}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.app{max-width:480px;min-height:100%;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;position:relative}
+@media (min-width:520px){.app{box-shadow:0 0 0 1px var(--line)}}
+
+.topbar{position:sticky;top:0;z-index:5;background:var(--bar);color:var(--bar-ink);padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 12px;display:flex;align-items:center;gap:12px}
+.topbar .logo{width:34px;height:34px;border-radius:9px;background:var(--accent-btn);display:grid;place-items:center;font-family:var(--display);color:#1E1A3A;font-size:1.25rem;flex:none}
+.topbar .t{display:grid;line-height:1.15;min-width:0}
+.topbar h1{font-size:1.25rem}
+.topbar small{color:var(--bar-muted);font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+main{flex:1;padding:16px 16px calc(96px + env(safe-area-inset-bottom,0px));display:block}
+.screen{display:grid;gap:14px}
+.screen-title{display:grid;gap:2px;padding-top:2px}
+.screen-title h2{font-size:1.4rem}
+.screen-title p{color:var(--muted);font-size:.9rem}
+.hi{font-family:var(--body);color:var(--muted);font-size:.9em;font-weight:400}
+.eyebrow{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:12px}
 .note{font-size:.82rem;color:var(--muted)}
-.results{display:grid;gap:24px;min-width:0}
-.core{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-@media (max-width:560px){.core{grid-template-columns:1fr}}
-.num{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:6px;align-content:start}
+
+/* profile card on home */
+.who{display:flex;align-items:center;gap:12px}
+.who .av{width:46px;height:46px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--display);font-size:1.3rem;flex:none}
+.who .n{font-weight:700;font-size:1.05rem;line-height:1.2}
+.who .d{color:var(--muted);font-size:.88rem}
+.who button{margin-left:auto}
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:700;cursor:pointer;background:var(--accent-btn);color:#1E1A3A}
+.btn.ghost{background:var(--sunk);color:var(--ink)}
+.btn.block{width:100%;padding:12px}
+form{display:grid;gap:12px}
+label{display:grid;gap:4px;font-weight:500;font-size:.9rem}
+input{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:11px 12px;width:100%}
+
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.num{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 10px;display:grid;gap:2px;text-align:center;cursor:pointer}
 .num.main{background:var(--accent-soft);border-color:transparent}
-.num .big{font-family:var(--display);font-size:3.4rem;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
-.num .planet{font-weight:700}
-.num .how{font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums;word-break:break-word}
-section{display:grid;gap:14px}
-.sec-head{display:grid;gap:2px}
-.sec-head p{color:var(--muted);font-size:.93rem;max-width:65ch}
-.gridwrap{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:20px;align-items:start}
-@media (max-width:640px){.gridwrap{grid-template-columns:1fr}}
-.vgrid{display:grid;grid-template-columns:repeat(3,1fr);border:2px solid var(--ink);border-radius:6px;overflow:hidden;aspect-ratio:1;max-width:100%}
-.cell{border:1px solid var(--line);display:grid;place-items:center;align-content:center;gap:2px;padding:6px;text-align:center;background:var(--surface)}
-.cell .digits{font-family:var(--display);font-size:1.6rem;color:var(--accent);min-height:1.9rem;letter-spacing:.06em;font-variant-numeric:tabular-nums}
-.cell.empty .digits{color:var(--line)}
-.cell .pl{font-size:.74rem;color:var(--muted);line-height:1.2}
-.cell.empty{background:var(--sunk)}
-.findings{display:grid;gap:10px}
-.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:.84rem;font-weight:500}
+.num .big{font-family:var(--display);font-size:2.6rem;line-height:1.05;color:var(--accent);font-variant-numeric:tabular-nums}
+.num .lbl{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.num .pl{font-size:.82rem;font-weight:700}
+.how{display:grid;gap:6px;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.how b{color:var(--ink);font-weight:500}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:.82rem;font-weight:500}
 .chip.good{background:var(--good-bg);color:var(--good)}
 .chip.warn{background:var(--warn-bg);color:var(--warn)}
 .chip.bad{background:var(--bad-bg);color:var(--bad)}
 .chip.teal{background:var(--teal-soft);color:var(--teal)}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.profile{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-@media (max-width:560px){.profile{grid-template-columns:1fr 1fr}}
-.profile div{background:var(--surface);padding:12px 14px;display:grid;gap:2px}
-.profile dt{font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.profile dd{margin:0;font-weight:500}
-.mantra{background:var(--teal-soft);color:var(--teal);border-radius:12px;padding:14px 16px;display:grid;gap:4px}
-.mantra .dev{font-size:1.25rem;font-weight:700;color:var(--ink)}
-.traits{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:560px){.traits{grid-template-columns:1fr}}
-.traits ul{margin:6px 0 0;padding-left:18px}
-.compat{display:grid;grid-template-columns:repeat(9,1fr);gap:6px}
-@media (max-width:560px){.compat{grid-template-columns:repeat(5,1fr)}}
-.cmp{border-radius:10px;padding:10px 4px;text-align:center;display:grid;gap:0}
-.cmp b{font-family:var(--display);font-size:1.5rem;font-weight:400;line-height:1.1}
-.cmp span{font-size:.7rem}
+
+.letters{display:flex;flex-wrap:wrap;gap:4px}
+.letter{display:grid;text-align:center;min-width:28px;border:1px solid var(--line);border-radius:6px;padding:3px 5px;background:var(--surface)}
+.letter i{font-style:normal;font-weight:700;font-size:.9rem}
+.letter small{color:var(--accent);font-variant-numeric:tabular-nums}
+.letter.gap{border:0;background:transparent;min-width:8px}
+
+.year{display:flex;gap:14px;align-items:center}
+.year .big{font-family:var(--display);font-size:2.6rem;color:var(--teal);line-height:1}
+
+/* grid */
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);border:2px solid var(--ink);border-radius:8px;overflow:hidden;aspect-ratio:1;max-width:100%}
+.cell{border:1px solid var(--line);display:grid;place-items:center;align-content:center;gap:2px;padding:6px;text-align:center;background:var(--surface)}
+.cell .digits{font-family:var(--display);font-size:1.7rem;color:var(--accent);letter-spacing:.06em;font-variant-numeric:tabular-nums;line-height:1.2}
+.cell.empty{background:var(--sunk)}
+.cell.empty .digits{color:var(--line)}
+.cell .pl{font-size:.72rem;color:var(--muted);line-height:1.2}
+
+/* graha */
+.picker{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
+.picker button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 0;font-family:var(--display);font-size:1.15rem;cursor:pointer;color:var(--ink)}
+.picker button[aria-pressed="true"]{background:var(--accent-btn);border-color:transparent;color:#1E1A3A}
+.graha-head{display:flex;align-items:center;gap:14px}
+.graha-head .big{font-family:var(--display);font-size:3rem;line-height:1;color:var(--accent);width:56px;text-align:center}
+.graha-head h2{font-size:1.5rem}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0}
+.facts div{background:var(--surface);padding:10px 12px;display:grid;gap:1px}
+.facts dt{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font-weight:500;font-size:.92rem}
+.mantra{background:var(--teal-soft);color:var(--teal);border-radius:12px;padding:14px;display:grid;gap:4px}
+.mantra .dev{font-size:1.2rem;font-weight:700;color:var(--ink)}
+.copy{justify-self:start;border:0;background:transparent;color:var(--teal);font-weight:700;padding:0;cursor:pointer;font-size:.85rem}
+ul.l{margin:4px 0 0;padding-left:18px}
+
+/* milan */
+.compat{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
+.cmp{border-radius:10px;padding:8px 0;text-align:center;display:grid}
+.cmp b{font-family:var(--display);font-size:1.3rem;font-weight:400;line-height:1.1}
+.cmp span{font-size:.6rem}
 .cmp.good{background:var(--good-bg);color:var(--good)}
 .cmp.warn{background:var(--warn-bg);color:var(--warn)}
 .cmp.bad{background:var(--bad-bg);color:var(--bad)}
-.legend{display:flex;flex-wrap:wrap;gap:6px}
-.name-table{overflow-x:auto}
-.letters{display:flex;flex-wrap:wrap;gap:4px}
-.letter{display:grid;text-align:center;min-width:30px;border:1px solid var(--line);border-radius:6px;padding:4px 6px;background:var(--surface)}
-.letter i{font-style:normal;font-weight:700}
-.letter small{color:var(--accent);font-variant-numeric:tabular-nums}
-.letter.gap{border:0;background:transparent;min-width:10px}
-.chart{overflow-x:auto}
-.chart table{border-collapse:collapse;width:100%;min-width:560px;font-size:.9rem}
-.chart th,.chart td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-.chart th{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
-.chart td:first-child{font-family:var(--display);font-size:1.3rem;color:var(--accent)}
-.chart tr.me td{background:var(--accent-soft)}
-.year{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
-.year .big{font-family:var(--display);font-size:2.6rem;color:var(--teal);line-height:1}
-footer{color:var(--muted);font-size:.82rem;max-width:70ch}
-@media (prefers-reduced-motion:no-preference){.num .big,.cell .digits{transition:color .2s}}
+.pair{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center}
+.pair .big{font-family:var(--display);font-size:2.2rem;color:var(--accent);line-height:1}
+.pair .vs{font-size:1.4rem;color:var(--muted)}
+.meter{height:10px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.meter i{display:block;height:100%;border-radius:999px;background:var(--good)}
+.score{font-family:var(--display);font-size:1.8rem;line-height:1}
+
+/* gyaan */
+.ref{display:grid;gap:8px}
+.ref .row{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;width:100%}
+.ref .row.me{background:var(--accent-soft);border-color:transparent}
+.ref .row b{font-family:var(--display);font-weight:400;font-size:1.6rem;color:var(--accent);line-height:1.1}
+.ref .row .t{font-weight:700}
+.ref .row .s{font-size:.82rem;color:var(--muted)}
+details{border-top:1px solid var(--line);padding-top:10px}
+details:first-of-type{border-top:0;padding-top:0}
+summary{font-weight:700;cursor:pointer}
+details p{margin-top:6px;color:var(--muted);font-size:.92rem}
+
+/* bottom nav */
+nav.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:6;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+nav.tabs button{border:0;background:transparent;display:grid;justify-items:center;gap:2px;padding:6px 0;cursor:pointer;color:var(--muted);font-size:.72rem;font-weight:500;border-radius:10px}
+nav.tabs svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav.tabs button[aria-current="page"]{color:var(--accent)}
+nav.tabs button[aria-current="page"] .pill{background:var(--accent-soft)}
+nav.tabs .pill{padding:2px 16px;border-radius:999px;display:grid;place-items:center}
+
+.install{display:flex;align-items:center;gap:10px;background:var(--teal-soft);color:var(--teal);border-radius:14px;padding:10px 12px;font-size:.88rem}
+.install .btn{margin-left:auto;background:var(--teal);color:var(--surface)}
+@media (prefers-reduced-motion:no-preference){.screen{animation:in .18s ease-out}@keyframes in{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}}
 </style>
-<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
-
-
-<div class="wrap">
-  <header>
-    <span class="eyebrow">अंक ज्योतिष · Vedic numerology</span>
-    <h1>Ank Jyotish</h1>
-    <p>Enter a name and date of birth to find the Moolank, Bhagyank and Namank, the Vedic number grid, and the ruling graha with its day, colour, ratna and beej mantra.</p>
+<div class="app">
+  <header class="topbar">
+    <div class="logo" aria-hidden="true">९</div>
+    <div class="t">
+      <h1 id="tb-title">Ank Jyotish</h1>
+      <small id="tb-sub">अंक ज्योतिष · Vedic numerology</small>
+    </div>
   </header>
 
-  <div class="layout">
-    <form id="f" class="panel" autocomplete="off">
-      <h2>Janm vivaran <span class="hi">जन्म विवरण</span></h2>
-      <label for="name">Full name (as commonly used)
-        <input id="name" name="name" value="Aarav Sharma" required>
-      </label>
-      <label for="dob">Date of birth
-        <input id="dob" name="dob" type="date" value="1990-08-14" required>
-      </label>
-      <button type="submit">Calculate</button>
-      <p class="note">Filled with an example person. Replace with your own details. Nothing is sent anywhere; the math runs in this page.</p>
-    </form>
+  <main id="main">
+    <!-- HOME -->
+    <section class="screen" data-screen="home">
+      <div class="install" id="installBar" hidden>
+        <span>Install Ank Jyotish on your phone</span>
+        <button class="btn" id="installBtn" type="button">Install</button>
+      </div>
 
-    <div class="results" id="out"></div>
-  </div>
+      <div class="card" id="whoCard">
+        <div class="who">
+          <div class="av" id="av">A</div>
+          <div>
+            <div class="n" id="whoName"></div>
+            <div class="d" id="whoDob"></div>
+          </div>
+          <button class="btn ghost" id="editBtn" type="button">Edit</button>
+        </div>
+        <form id="f" hidden>
+          <label for="name">Full name (as commonly used)
+            <input id="name" autocomplete="name" required>
+          </label>
+          <label for="dob">Date of birth
+            <input id="dob" type="date" required>
+          </label>
+          <button class="btn block" type="submit">Show my numbers</button>
+        </form>
+        <p class="note" id="sampleNote">This is an example person. Tap Edit and enter your own details. Everything stays on this device.</p>
+      </div>
 
-  <section class="panel">
-    <div class="sec-head">
-      <h2>The nine numbers and their grahas <span class="hi">अंक और ग्रह</span></h2>
-      <p>Each number from 1 to 9 is ruled by one of the Navagraha. Your Moolank row is highlighted.</p>
-    </div>
-    <div class="chart"><table id="chart"></table></div>
-  </section>
+      <div class="trio">
+        <button class="num main" data-go="1" type="button"><span class="lbl">Moolank</span><span class="big" id="mNum"></span><span class="pl" id="mPl"></span></button>
+        <button class="num" data-go="2" type="button"><span class="lbl">Bhagyank</span><span class="big" id="bNum"></span><span class="pl" id="bPl"></span></button>
+        <button class="num" data-go="3" type="button"><span class="lbl">Namank</span><span class="big" id="nNum"></span><span class="pl" id="nPl"></span></button>
+      </div>
 
-  <footer>
-    Ank Jyotish is a traditional belief system and cultural practice. Treat readings as reflection, not as medical, financial or legal guidance. Graha friendships and remedies differ between teachers and families; this app follows the Naisargika Maitri (natural friendship) table from Parashari jyotish and the Chaldean letter values used by most Indian numerologists.
-  </footer>
+      <div class="card">
+        <span class="eyebrow">How it was calculated</span>
+        <div class="how" id="how"></div>
+      </div>
+
+      <div class="card">
+        <span class="eyebrow">Name harmony · नाम मिलान</span>
+        <div class="chips" id="harm"></div>
+        <p id="harmText"></p>
+        <div class="letters" id="letters"></div>
+      </div>
+
+      <div class="card">
+        <span class="eyebrow">Personal year <span id="py-year"></span> · व्यक्तिगत वर्ष</span>
+        <div class="year"><div class="big" id="pyNum"></div><p id="pyText"></p></div>
+      </div>
+    </section>
+
+    <!-- GRID -->
+    <section class="screen" data-screen="grid" hidden>
+      <div class="screen-title">
+        <h2>Vedic grid <span class="hi">अंक चक्र</span></h2>
+        <p>Birth-date digits plus Moolank and Bhagyank, each in its graha's box.</p>
+      </div>
+      <div class="vgrid" id="vgrid"></div>
+      <div class="card">
+        <span class="eyebrow">Missing numbers</span>
+        <div class="chips" id="missing"></div>
+        <p class="note" id="missingNote"></p>
+      </div>
+      <div class="card" id="repCard">
+        <span class="eyebrow">Repeated numbers</span>
+        <div class="chips" id="repeated"></div>
+        <p class="note">Three or more of one number can push its qualities to excess.</p>
+      </div>
+      <div class="card">
+        <span class="eyebrow">Planes · रेखाएँ</span>
+        <div class="chips" id="planes"></div>
+      </div>
+    </section>
+
+    <!-- GRAHA -->
+    <section class="screen" data-screen="graha" hidden>
+      <div class="picker" id="picker" role="group" aria-label="Choose a number"></div>
+      <div class="graha-head">
+        <div class="big" id="gNum"></div>
+        <div>
+          <h2 id="gName"></h2>
+          <p class="hi" id="gSub"></p>
+        </div>
+      </div>
+      <dl class="facts" id="gFacts"></dl>
+      <div class="mantra">
+        <span class="eyebrow" style="color:inherit" id="gMantraLbl"></span>
+        <div class="dev" id="gMantra"></div>
+        <div id="gMantraR"></div>
+        <button class="copy" id="copyBtn" type="button">Copy mantra</button>
+      </div>
+      <div class="card">
+        <div><h3>Strengths</h3><ul class="l" id="gPlus"></ul></div>
+        <div><h3>Watch for</h3><ul class="l" id="gMinus"></ul></div>
+      </div>
+      <div class="card">
+        <span class="eyebrow">Upay · remedy</span>
+        <p id="gRemedy"></p>
+        <p class="note" id="gDates"></p>
+      </div>
+    </section>
+
+    <!-- MILAN -->
+    <section class="screen" data-screen="milan" hidden>
+      <div class="screen-title">
+        <h2>Milan <span class="hi">मिलान</span></h2>
+        <p>Check number compatibility with a partner, friend or business associate.</p>
+      </div>
+      <div class="card">
+        <form id="pf">
+          <label for="pname">Their name
+            <input id="pname">
+          </label>
+          <label for="pdob">Their date of birth
+            <input id="pdob" type="date">
+          </label>
+          <button class="btn block" type="submit">Check match</button>
+        </form>
+      </div>
+      <div class="card" id="matchCard"></div>
+      <div class="card">
+        <span class="eyebrow">Your Moolank with each number</span>
+        <div class="compat" id="compat"></div>
+        <div class="chips"><span class="chip good">Friendly · मित्र</span><span class="chip warn">Neutral · सम</span><span class="chip bad">Challenging · शत्रु</span></div>
+      </div>
+    </section>
+
+    <!-- GYAAN -->
+    <section class="screen" data-screen="gyaan" hidden>
+      <div class="screen-title">
+        <h2>Gyaan <span class="hi">ज्ञान</span></h2>
+        <p>The nine numbers, their grahas, and how Ank Jyotish works.</p>
+      </div>
+      <div class="ref" id="ref"></div>
+      <div class="card">
+        <details open><summary>Moolank · मूलांक</summary><p>Your birth day reduced to one digit. Born on the 23rd: 2 + 3 = 5. It describes your nature and how others see you.</p></details>
+        <details><summary>Bhagyank · भाग्यांक</summary><p>All digits of your full birth date added and reduced. It describes your destiny and the path life pushes you toward.</p></details>
+        <details><summary>Namank · नामांक</summary><p>Each letter of your name has a value (Chaldean system: A=1, B=2, C=3, D=4, E=5, F=8, G=3, H=5 …). The total is reduced to one digit. Names are often adjusted so this number is a friend of the Moolank and Bhagyank.</p></details>
+        <details><summary>Vedic grid · अंक चक्र</summary><p>A 3×3 chart laid out 3‑1‑9 / 6‑7‑5 / 2‑8‑4, one box per graha. Zeros are dropped. Missing numbers show qualities to develop, usually through that graha's remedy.</p></details>
+        <details><summary>A note on belief</summary><p>Ank Jyotish is a traditional practice. Use it for reflection, not for medical, financial or legal decisions. Graha friendships and remedies vary between teachers; this app follows the Parashari natural friendship table.</p></details>
+      </div>
+      <p class="note" style="text-align:center">© Ikshana Solutions LLC</p>
+    </section>
+  </main>
+
+  <nav class="tabs" aria-label="Sections">
+    <button type="button" data-tab="home" aria-current="page"><span class="pill"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/></svg></span>Ank</button>
+    <button type="button" data-tab="grid"><span class="pill"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg></span>Chakra</button>
+    <button type="button" data-tab="graha"><span class="pill"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span>Graha</button>
+    <button type="button" data-tab="milan"><span class="pill"><svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span>Milan</button>
+    <button type="button" data-tab="gyaan"><span class="pill"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7"/></svg></span>Gyaan</button>
+  </nav>
 </div>
 
 <script>
 const P = {
-  1:{en:"Sun",hi:"सूर्य",tr:"Surya",day:"Sunday · रविवार",color:"Gold, orange, copper",gem:"Ruby (Manik)",metal:"Gold, copper",deity:"Surya Dev",dir:"East",mantra:"ॐ ह्रां ह्रीं ह्रौं सः सूर्याय नमः",mr:"Om Hraam Hreem Hraum Sah Suryaya Namah",
+  1:{en:"Sun",hi:"सूर्य",tr:"Surya",day:"Sunday",dayhi:"रविवार",color:"Gold, orange, copper",gem:"Ruby (Manik)",metal:"Gold, copper",deity:"Surya Dev",dir:"East",mantra:"ॐ ह्रां ह्रीं ह्रौं सः सूर्याय नमः",mr:"Om Hraam Hreem Hraum Sah Suryaya Namah",
      plus:["Natural leader, self-driven","Confident and dignified","Original thinker, likes to start things"],minus:["Can be proud or bossy","Dislikes taking orders","Ego clashes with authority"],
-     remedy:"Offer water (arghya) to the rising Sun on Sundays; respect your father and elders."},
-  2:{en:"Moon",hi:"चन्द्र",tr:"Chandra",day:"Monday · सोमवार",color:"White, cream, silver",gem:"Pearl (Moti)",metal:"Silver",deity:"Shiva",dir:"North-west",mantra:"ॐ श्रां श्रीं श्रौं सः चन्द्राय नमः",mr:"Om Shraam Shreem Shraum Sah Chandraya Namah",
+     remedy:"Offer water (arghya) to the rising Sun on Sundays. Respect your father and elders."},
+  2:{en:"Moon",hi:"चन्द्र",tr:"Chandra",day:"Monday",dayhi:"सोमवार",color:"White, cream, silver",gem:"Pearl (Moti)",metal:"Silver",deity:"Shiva",dir:"North-west",mantra:"ॐ श्रां श्रीं श्रौं सः चन्द्राय नमः",mr:"Om Shraam Shreem Shraum Sah Chandraya Namah",
      plus:["Gentle, caring, intuitive","Imaginative and artistic","Diplomatic, a good partner"],minus:["Moody and sensitive","Indecisive under pressure","Worries too much"],
-     remedy:"Offer milk or water on a Shivling on Mondays; keep a silver item with you."},
-  3:{en:"Jupiter",hi:"गुरु",tr:"Guru / Brihaspati",day:"Thursday · गुरुवार",color:"Yellow, saffron",gem:"Yellow sapphire (Pukhraj)",metal:"Gold",deity:"Vishnu",dir:"North-east",mantra:"ॐ ग्रां ग्रीं ग्रौं सः गुरवे नमः",mr:"Om Graam Greem Graum Sah Gurave Namah",
+     remedy:"Offer milk or water on a Shivling on Mondays. Keep a silver item with you."},
+  3:{en:"Jupiter",hi:"गुरु",tr:"Guru",day:"Thursday",dayhi:"गुरुवार",color:"Yellow, saffron",gem:"Yellow sapphire (Pukhraj)",metal:"Gold",deity:"Vishnu",dir:"North-east",mantra:"ॐ ग्रां ग्रीं ग्रौं सः गुरवे नमः",mr:"Om Graam Greem Graum Sah Gurave Namah",
      plus:["Wise, disciplined, a teacher","Honest and principled","Ambitious for knowledge"],minus:["Can lecture or moralise","Rigid about rules","Proud of being right"],
-     remedy:"Apply a tilak of turmeric or saffron on Thursdays; donate chana dal or yellow items."},
-  4:{en:"Rahu",hi:"राहु",tr:"Rahu",day:"Saturday · शनिवार",color:"Grey, smoky blue",gem:"Hessonite (Gomed)",metal:"Lead, mixed metal",deity:"Durga",dir:"South-west",mantra:"ॐ भ्रां भ्रीं भ्रौं सः राहवे नमः",mr:"Om Bhraam Bhreem Bhraum Sah Rahave Namah",
+     remedy:"Apply a turmeric or saffron tilak on Thursdays. Donate chana dal or yellow items."},
+  4:{en:"Rahu",hi:"राहु",tr:"Rahu",day:"Saturday",dayhi:"शनिवार",color:"Grey, smoky blue",gem:"Hessonite (Gomed)",metal:"Lead, mixed metal",deity:"Durga",dir:"South-west",mantra:"ॐ भ्रां भ्रीं भ्रौं सः राहवे नमः",mr:"Om Bhraam Bhreem Bhraum Sah Rahave Namah",
      plus:["Unconventional, sees what others miss","Hard-working and methodical","Good with technology and systems"],minus:["Sudden ups and downs","Rebellious, argumentative","Few close friends"],
-     remedy:"Feed birds or stray dogs; recite Durga Chalisa; avoid shortcuts in money matters."},
-  5:{en:"Mercury",hi:"बुध",tr:"Budh",day:"Wednesday · बुधवार",color:"Green",gem:"Emerald (Panna)",metal:"Bronze",deity:"Ganesha",dir:"North",mantra:"ॐ ब्रां ब्रीं ब्रौं सः बुधाय नमः",mr:"Om Braam Breem Braum Sah Budhaya Namah",
+     remedy:"Feed birds or stray dogs. Recite Durga Chalisa. Avoid shortcuts in money matters."},
+  5:{en:"Mercury",hi:"बुध",tr:"Budh",day:"Wednesday",dayhi:"बुधवार",color:"Green",gem:"Emerald (Panna)",metal:"Bronze",deity:"Ganesha",dir:"North",mantra:"ॐ ब्रां ब्रीं ब्रौं सः बुधाय नमः",mr:"Om Braam Breem Braum Sah Budhaya Namah",
      plus:["Quick mind, good communicator","Business sense, adaptable","Witty and youthful"],minus:["Restless, easily bored","Nervous energy","Can scatter effort"],
-     remedy:"Offer durva grass to Ganesha on Wednesdays; feed green fodder to cows."},
-  6:{en:"Venus",hi:"शुक्र",tr:"Shukra",day:"Friday · शुक्रवार",color:"White, pink, light blue",gem:"Diamond (Heera) or white sapphire",metal:"Silver, platinum",deity:"Lakshmi",dir:"South-east",mantra:"ॐ द्रां द्रीं द्रौं सः शुक्राय नमः",mr:"Om Draam Dreem Draum Sah Shukraya Namah",
+     remedy:"Offer durva grass to Ganesha on Wednesdays. Feed green fodder to cows."},
+  6:{en:"Venus",hi:"शुक्र",tr:"Shukra",day:"Friday",dayhi:"शुक्रवार",color:"White, pink, light blue",gem:"Diamond (Heera) or white sapphire",metal:"Silver, platinum",deity:"Lakshmi",dir:"South-east",mantra:"ॐ द्रां द्रीं द्रौं सः शुक्राय नमः",mr:"Om Draam Dreem Draum Sah Shukraya Namah",
      plus:["Charming, loves beauty and art","Family-oriented, loyal","Draws comfort and wealth"],minus:["Fond of luxury","Can be vain or possessive","Avoids hard conflict"],
-     remedy:"Worship Lakshmi on Fridays; wear clean, fragrant clothes; donate white sweets."},
-  7:{en:"Ketu",hi:"केतु",tr:"Ketu",day:"Tuesday · मंगलवार",color:"Smoky grey, multicolour",gem:"Cat's eye (Lehsuniya)",metal:"Mixed metal",deity:"Ganesha",dir:"—",mantra:"ॐ स्रां स्रीं स्रौं सः केतवे नमः",mr:"Om Sraam Sreem Sraum Sah Ketave Namah",
+     remedy:"Worship Lakshmi on Fridays. Wear clean, fragrant clothes. Donate white sweets."},
+  7:{en:"Ketu",hi:"केतु",tr:"Ketu",day:"Tuesday",dayhi:"मंगलवार",color:"Smoky grey, multicolour",gem:"Cat's eye (Lehsuniya)",metal:"Mixed metal",deity:"Ganesha",dir:"—",mantra:"ॐ स्रां स्रीं स्रौं सः केतवे नमः",mr:"Om Sraam Sreem Sraum Sah Ketave Namah",
      plus:["Spiritual and intuitive","Researcher, goes deep","Independent thinker"],minus:["Detached or secretive","Doubts own path","Restless, likes to travel"],
-     remedy:"Worship Ganesha; donate a blanket to the needy; keep a dog as a companion if you can."},
-  8:{en:"Saturn",hi:"शनि",tr:"Shani",day:"Saturday · शनिवार",color:"Black, dark blue",gem:"Blue sapphire (Neelam) — test before wearing",metal:"Iron",deity:"Hanuman, Shani Dev",dir:"West",mantra:"ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः",mr:"Om Praam Preem Praum Sah Shanaishcharaya Namah",
+     remedy:"Worship Ganesha. Donate a blanket to someone in need."},
+  8:{en:"Saturn",hi:"शनि",tr:"Shani",day:"Saturday",dayhi:"शनिवार",color:"Black, dark blue",gem:"Blue sapphire (Neelam), test before wearing",metal:"Iron",deity:"Hanuman, Shani Dev",dir:"West",mantra:"ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः",mr:"Om Praam Preem Praum Sah Shanaishcharaya Namah",
      plus:["Patient, serious, reliable","Builds slowly and lasts","Strong sense of justice"],minus:["Delays and heavy responsibility","Can feel lonely or misunderstood","Pessimistic phases"],
-     remedy:"Light a mustard-oil lamp under a peepal tree on Saturdays; recite Hanuman Chalisa; help workers and the elderly."},
-  9:{en:"Mars",hi:"मंगल",tr:"Mangal",day:"Tuesday · मंगलवार",color:"Red, maroon",gem:"Red coral (Moonga)",metal:"Copper",deity:"Hanuman",dir:"South",mantra:"ॐ क्रां क्रीं क्रौं सः भौमाय नमः",mr:"Om Kraam Kreem Kraum Sah Bhaumaya Namah",
-     plus:["Brave, energetic, protective","Direct and action-oriented","Fighter who finishes tasks"],minus:["Quick temper","Impatient","Accident-prone when rushed"],
-     remedy:"Recite Hanuman Chalisa on Tuesdays; donate red lentils (masoor dal); channel energy into exercise."}
+     remedy:"Light a mustard-oil lamp under a peepal tree on Saturdays. Recite Hanuman Chalisa. Help workers and the elderly."},
+  9:{en:"Mars",hi:"मंगल",tr:"Mangal",day:"Tuesday",dayhi:"मंगलवार",color:"Red, maroon",gem:"Red coral (Moonga)",metal:"Copper",deity:"Hanuman",dir:"South",mantra:"ॐ क्रां क्रीं क्रौं सः भौमाय नमः",mr:"Om Kraam Kreem Kraum Sah Bhaumaya Namah",
+     plus:["Brave, energetic, protective","Direct and action-oriented","Finishes what it starts"],minus:["Quick temper","Impatient","Accident-prone when rushed"],
+     remedy:"Recite Hanuman Chalisa on Tuesdays. Donate red lentils (masoor dal). Channel energy into exercise."}
 };
-// Naisargika maitri (natural friendship), mapped to numbers. Rahu/Ketu vary by tradition.
+// Naisargika maitri (natural friendship) mapped to numbers
 const REL = {
-  1:{f:[2,9,3],n:[5],e:[6,8,4,7]},
-  2:{f:[1,5],n:[9,3,6,8,4,7],e:[]},
-  3:{f:[1,2,9],n:[8,4,7],e:[5,6]},
-  4:{f:[5,6,8],n:[3],e:[1,2,9]},
-  5:{f:[1,6],n:[9,3,8,4,7],e:[2]},
-  6:{f:[5,8,4,7],n:[9,3],e:[1,2]},
-  7:{f:[9,6,8],n:[3,5],e:[1,2]},
-  8:{f:[5,6,4,7],n:[3],e:[1,2,9]},
-  9:{f:[1,2,3],n:[6,8,4,7],e:[5]}
+  1:{f:[2,9,3],n:[5],e:[6,8,4,7]}, 2:{f:[1,5],n:[9,3,6,8,4,7],e:[]}, 3:{f:[1,2,9],n:[8,4,7],e:[5,6]},
+  4:{f:[5,6,8],n:[3],e:[1,2,9]}, 5:{f:[1,6],n:[9,3,8,4,7],e:[2]}, 6:{f:[5,8,4,7],n:[9,3],e:[1,2]},
+  7:{f:[9,6,8],n:[3,5],e:[1,2]}, 8:{f:[5,6,4,7],n:[3],e:[1,2,9]}, 9:{f:[1,2,3],n:[6,8,4,7],e:[5]}
 };
-// Chaldean letter values
 const CH = {A:1,I:1,J:1,Q:1,Y:1,B:2,K:2,R:2,C:3,G:3,L:3,S:3,D:4,M:4,T:4,E:5,H:5,N:5,X:5,U:6,V:6,W:6,O:7,Z:7,F:8,P:8};
-// Vedic grid layout (rows): 3 1 9 / 6 7 5 / 2 8 4
 const GRID = [3,1,9,6,7,5,2,8,4];
+const YEAR = {
+  1:"New beginnings. Start the project, take the job, plant the seed.",
+  2:"A slower year for partnerships and patience. Cooperate rather than push.",
+  3:"Learning, growth and expression. Good for study and teaching.",
+  4:"Hard work and foundations. Expect effort and some surprises.",
+  5:"Change, travel and movement. Stay flexible.",
+  6:"Home, family and responsibility. Good for marriage and property.",
+  7:"Reflection and inner work. Research, rest, spiritual practice.",
+  8:"Karma and results. Discipline pays; shortcuts cost.",
+  9:"Completion. Finish, let go and clear space for the next cycle."
+};
+const relWord = {good:"Friendly",warn:"Neutral",bad:"Challenging"};
+const SAMPLE = {name:"Aarav Sharma", dob:"1990-08-14"};
 
-const reduce = n => { while(n>9) n = String(n).split("").reduce((a,d)=>a+ +d,0); return n; };
-const digitsum = s => s.replace(/\D/g,"").split("").reduce((a,d)=>a+ +d,0);
-const chain = n => { const out=[n]; while(n>9){ n=digitsum(String(n)); out.push(n);} return out.join(" → "); };
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const digitsum = s => String(s).replace(/\D/g,"").split("").reduce((a,d)=>a+ +d,0);
+const reduce = n => { while(n>9) n = digitsum(n); return n; };
+const chain = n => { const o=[n]; while(n>9){ n=digitsum(n); o.push(n);} return o.join(" → "); };
+const relation = (a,b) => a===b ? "good" : REL[a].f.includes(b) ? "good" : REL[a].e.includes(b) ? "bad" : "warn";
 
-function relation(a,b){ if(a===b) return "good"; const r=REL[a]; return r.f.includes(b)?"good":r.e.includes(b)?"bad":"warn"; }
-const relWord = {good:"Friendly · मित्र",warn:"Neutral · सम",bad:"Challenging · शत्रु"};
+function store(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function load(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
 
 function calc(name,dob){
   const [y,m,d] = dob.split("-");
-  const day = +d;
-  const moolank = reduce(day);
-  const allSum = digitsum(d+m+y);
-  const bhagyank = reduce(allSum);
-  const letters = name.toUpperCase().split("");
+  const day = +d, moolank = reduce(day);
+  const allSum = digitsum(d+m+y), bhagyank = reduce(allSum);
   let nameTotal = 0;
-  const lv = letters.map(ch=>{ const v = CH[ch]; if(v) nameTotal+=v; return {ch, v}; });
+  const lv = name.toUpperCase().split("").map(ch=>{ const v=CH[ch]; if(v) nameTotal+=v; return {ch,v}; });
   const namank = nameTotal ? reduce(nameTotal) : null;
-  // Grid: DOB digits (no zeros) + moolank (if day>9) + bhagyank
-  const gridDigits = (d+m+y).replace(/0/g,"").split("").map(Number);
-  // Moolank is added only for two-digit birth days (10, 20, 30 excluded by most teachers)
-  if(day>9 && day%10!==0) gridDigits.push(moolank);
-  gridDigits.push(bhagyank);
-  const counts = {}; for(let i=1;i<=9;i++) counts[i]=0; gridDigits.forEach(g=>counts[g]++);
-  // Personal year (current)
+  const gd = (d+m+y).replace(/0/g,"").split("").map(Number);
+  if(day>9 && day%10!==0) gd.push(moolank);
+  gd.push(bhagyank);
+  const counts = {}; for(let i=1;i<=9;i++) counts[i]=0; gd.forEach(g=>counts[g]++);
   const cy = new Date().getFullYear();
-  const pYear = reduce(digitsum(d+m+String(cy)));
+  const pYear = reduce(digitsum(d+m+cy));
   return {d,m,y,day,moolank,allSum,bhagyank,lv,nameTotal,namank,counts,pYear,cy};
 }
 
-function render(){
-  const name = document.getElementById("name").value.trim() || "—";
-  const dob = document.getElementById("dob").value;
-  if(!dob){ document.getElementById("out").innerHTML = '<div class="panel"><p>Add a date of birth to see the reading.</p></div>'; return; }
-  const r = calc(name,dob);
-  const mp = P[r.moolank], bp = P[r.bhagyank];
-  const np = r.namank ? P[r.namank] : null;
+let me = load("ank.me") || SAMPLE;
+let R = null;
+let grahaSel = null;
 
-  const nameRel = r.namank ? relation(r.moolank, r.namank) : null;
-  const nbRel = r.namank ? relation(r.bhagyank, r.namank) : null;
-  const mbRel = relation(r.moolank, r.bhagyank);
+function fmtDate(dob){
+  const [y,m,d] = dob.split("-").map(Number);
+  return new Date(y,m-1,d).toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"});
+}
 
-  const missing = Object.keys(r.counts).filter(k=>r.counts[k]===0).map(Number);
-  const repeated = Object.keys(r.counts).filter(k=>r.counts[k]>=3).map(Number);
+function renderAll(){
+  R = calc(me.name, me.dob);
+  const isSample = me.name===SAMPLE.name && me.dob===SAMPLE.dob;
+  $("sampleNote").hidden = !isSample;
+  $("whoName").textContent = me.name;
+  $("whoDob").textContent = "Born " + fmtDate(me.dob);
+  $("av").textContent = (me.name.trim()[0]||"?").toUpperCase();
+  $("name").value = me.name; $("dob").value = me.dob;
 
-  const rows = [[3,1,9],[6,7,5],[2,8,4]];
-  const planes = [
-    {n:"Mental plane (3·1·9)", s:rows[0]},{n:"Emotional plane (6·7·5)", s:rows[1]},{n:"Practical plane (2·8·4)", s:rows[2]}
-  ];
-  const planeHtml = planes.map(p=>{
-    const full = p.s.every(x=>r.counts[x]>0);
-    return full ? `<span class="chip good">✓ ${p.n} complete</span>` : "";
-  }).join("");
+  $("mNum").textContent = R.moolank; $("mPl").textContent = P[R.moolank].tr;
+  $("bNum").textContent = R.bhagyank; $("bPl").textContent = P[R.bhagyank].tr;
+  $("nNum").textContent = R.namank ?? "–"; $("nPl").textContent = R.namank ? P[R.namank].tr : "—";
+  document.querySelector('[data-go="3"]').dataset.n = R.namank || "";
+  document.querySelector('[data-go="1"]').dataset.n = R.moolank;
+  document.querySelector('[data-go="2"]').dataset.n = R.bhagyank;
 
-  document.getElementById("out").innerHTML = `
-    <div class="core">
-      <div class="num main">
-        <span class="eyebrow">Moolank · मूलांक</span>
-        <div class="big">${r.moolank}</div>
-        <div class="planet">${mp.tr} <span class="hi">${mp.hi}</span></div>
-        <div class="how">Birth day ${r.day}${r.day>9?` → ${String(r.day).split("").join(" + ")} = ${r.moolank}`:""}. Shapes your nature and how others see you.</div>
-      </div>
-      <div class="num">
-        <span class="eyebrow">Bhagyank · भाग्यांक</span>
-        <div class="big">${r.bhagyank}</div>
-        <div class="planet">${bp.tr} <span class="hi">${bp.hi}</span></div>
-        <div class="how">${(r.d+r.m+r.y).split("").join("+")} = ${chain(r.allSum)}. Your destiny and life path.</div>
-      </div>
-      <div class="num">
-        <span class="eyebrow">Namank · नामांक</span>
-        <div class="big">${r.namank ?? "–"}</div>
-        <div class="planet">${np ? `${np.tr} <span class="hi">${np.hi}</span>` : "Add a name in English letters"}</div>
-        <div class="how">${r.namank ? `Letter total ${chain(r.nameTotal)}. The vibration of your name.` : ""}</div>
-      </div>
+  $("how").innerHTML = `
+    <div><b>Moolank:</b> birth day ${R.day}${R.day>9?` → ${String(R.day).split("").join(" + ")} = ${R.moolank}`:""}</div>
+    <div><b>Bhagyank:</b> ${(R.d+R.m+R.y).split("").join("+")} = ${chain(R.allSum)}</div>
+    <div><b>Namank:</b> ${R.namank?`letter total ${chain(R.nameTotal)}`:"enter a name in English letters"}</div>`;
+
+  // harmony
+  const mb = relation(R.moolank,R.bhagyank);
+  let h = `<span class="chip ${mb}">Moolank ↔ Bhagyank: ${relWord[mb]}</span>`;
+  if(R.namank){
+    const mn = relation(R.moolank,R.namank), bn = relation(R.bhagyank,R.namank);
+    h += `<span class="chip ${mn}">Moolank ↔ Namank: ${relWord[mn]}</span><span class="chip ${bn}">Bhagyank ↔ Namank: ${relWord[bn]}</span>`;
+    const friends = [...new Set([R.moolank,...REL[R.moolank].f])].sort().join(", ");
+    $("harmText").innerHTML = (mn==="good" && bn!=="bad")
+      ? `<strong>Your name supports you.</strong> Namank ${R.namank} (${P[R.namank].tr}) sits well with your birth numbers.`
+      : `<strong>Your name could be tuned.</strong> Numerologists suggest a spelling whose total reduces to a friendly number. For Moolank ${R.moolank} those are ${friends}.`;
+  } else $("harmText").textContent = "";
+  $("harm").innerHTML = h;
+  $("letters").innerHTML = R.lv.map(l => l.v ? `<span class="letter"><i>${esc(l.ch)}</i><small>${l.v}</small></span>` : (l.ch===" "?`<span class="letter gap"></span>`:"")).join("");
+
+  $("py-year").textContent = R.cy;
+  $("pyNum").textContent = R.pYear;
+  $("pyText").textContent = YEAR[R.pYear];
+
+  // grid
+  $("vgrid").innerHTML = GRID.map(n=>`<div class="cell ${R.counts[n]?"":"empty"}"><div class="digits">${R.counts[n]?String(n).repeat(R.counts[n]):n}</div><div class="pl">${P[n].tr}<br>${P[n].hi}</div></div>`).join("");
+  const missing = GRID.filter(n=>!R.counts[n]).sort();
+  const repeated = GRID.filter(n=>R.counts[n]>=3).sort();
+  $("missing").innerHTML = missing.length ? missing.map(n=>`<span class="chip bad">${n} · ${P[n].tr}</span>`).join("") : `<span class="chip good">None missing</span>`;
+  $("missingNote").textContent = missing.length ? `Missing numbers are traditionally balanced through their graha's remedy. Open the Graha tab and pick ${missing.join(", ")} to see each one.` : "";
+  $("repCard").hidden = !repeated.length;
+  $("repeated").innerHTML = repeated.map(n=>`<span class="chip warn">${n} × ${R.counts[n]} · ${P[n].tr}</span>`).join("");
+  const planes = [["Mental",[3,1,9]],["Emotional",[6,7,5]],["Practical",[2,8,4]],["Thought",[3,6,2]],["Will",[1,7,8]],["Action",[9,5,4]],["Success",[3,7,4]],["Golden",[9,7,2]]];
+  $("planes").innerHTML = planes.map(([nm,s])=>{const full=s.every(x=>R.counts[x]);return `<span class="chip ${full?"good":"warn"}">${full?"✓":"○"} ${nm} ${s.join("·")}</span>`}).join("");
+
+  // milan
+  $("compat").innerHTML = [1,2,3,4,5,6,7,8,9].map(n=>{const c=relation(R.moolank,n);return `<div class="cmp ${c}"><b>${n}</b><span>${P[n].tr}</span></div>`}).join("");
+  renderMatch();
+
+  // gyaan
+  $("ref").innerHTML = [1,2,3,4,5,6,7,8,9].map(n=>`<button type="button" class="row ${n===R.moolank?"me":""}" data-n="${n}"><b>${n}</b><span><span class="t">${P[n].tr} <span class="hi">${P[n].hi} · ${P[n].en}</span></span><br><span class="s">${P[n].day} · ${P[n].gem} · ${P[n].color}</span></span></button>`).join("");
+
+  if(grahaSel===null) grahaSel = R.moolank;
+  renderGraha();
+}
+
+function renderGraha(){
+  const n = grahaSel, p = P[n];
+  $("picker").innerHTML = [1,2,3,4,5,6,7,8,9].map(i=>`<button type="button" data-n="${i}" aria-pressed="${i===n}">${i}</button>`).join("");
+  $("gNum").textContent = n;
+  $("gName").innerHTML = `${p.tr} <span class="hi">${p.hi}</span>`;
+  const tags = [];
+  if(n===R.moolank) tags.push("your Moolank");
+  if(n===R.bhagyank) tags.push("your Bhagyank");
+  if(n===R.namank) tags.push("your Namank");
+  if(!R.counts[n]) tags.push("missing in your grid");
+  $("gSub").textContent = p.en + (tags.length ? " · " + tags.join(", ") : "");
+  $("gFacts").innerHTML = [["Day",`${p.day} · ${p.dayhi}`],["Colour",p.color],["Ratna",p.gem],["Metal",p.metal],["Devta",p.deity],["Direction",p.dir]]
+    .map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+  $("gMantraLbl").textContent = `Beej mantra · 108 times on ${p.day}`;
+  $("gMantra").textContent = p.mantra;
+  $("gMantraR").textContent = p.mr;
+  $("copyBtn").textContent = "Copy mantra";
+  $("gPlus").innerHTML = p.plus.map(x=>`<li>${x}</li>`).join("");
+  $("gMinus").innerHTML = p.minus.map(x=>`<li>${x}</li>`).join("");
+  $("gRemedy").textContent = p.remedy;
+  $("gDates").textContent = `Dates ruled by ${n}: ` + [n,n+9,n+18,n+27].filter(x=>x<=31).join(", ") + " of every month.";
+}
+
+function renderMatch(){
+  const pd = $("pdob").value, pn = $("pname").value.trim() || "Them";
+  const box = $("matchCard");
+  if(!pd){ box.innerHTML = `<span class="eyebrow">Result</span><p class="note">Enter their date of birth to see how your numbers match.</p>`; return; }
+  const Q = calc(pn, pd);
+  const r1 = relation(R.moolank,Q.moolank), r2 = relation(Q.moolank,R.moolank), r3 = relation(R.bhagyank,Q.bhagyank);
+  const pts = {good:2,warn:1,bad:0};
+  const score = Math.round((pts[r1]+pts[r2]+pts[r3])/6*100);
+  const verdict = score>=80?"Strong match":score>=50?"Workable match":"Needs effort";
+  box.innerHTML = `
+    <div class="pair">
+      <div><div class="big">${R.moolank}</div><div class="note">${esc(me.name.split(" ")[0])} · ${P[R.moolank].tr}</div></div>
+      <div class="vs">↔</div>
+      <div><div class="big">${Q.moolank}</div><div class="note">${esc(pn.split(" ")[0])} · ${P[Q.moolank].tr}</div></div>
     </div>
-
-    <section class="panel">
-      <div class="sec-head">
-        <h2>How the numbers get along <span class="hi">अंकों का तालमेल</span></h2>
-        <p>Harmony between your three numbers is the classic test for a lucky name. When the Namank is a friend of both Moolank and Bhagyank, the name is considered supportive.</p>
-      </div>
-      <div class="chips">
-        <span class="chip ${mbRel}">Moolank ${r.moolank} ↔ Bhagyank ${r.bhagyank}: ${relWord[mbRel]}</span>
-        ${r.namank?`<span class="chip ${nameRel}">Moolank ${r.moolank} ↔ Namank ${r.namank}: ${relWord[nameRel]}</span>
-        <span class="chip ${nbRel}">Bhagyank ${r.bhagyank} ↔ Namank ${r.namank}: ${relWord[nbRel]}</span>`:""}
-      </div>
-      ${r.namank?`<p>${nameRel==="good"&&nbRel!=="bad" ? `<strong>Your name supports you.</strong> Namank ${r.namank} (${np.tr}) sits well with your birth numbers.` :
-        `<strong>Your name could be tuned.</strong> Numerologists usually suggest a spelling whose total reduces to a friendly number. For Moolank ${r.moolank}, friendly name numbers are ${[r.moolank,...REL[r.moolank].f].filter((v,i,a)=>a.indexOf(v)===i).sort().join(", ")}.`}</p>`:""}
-      <div>
-        <span class="eyebrow">Letter values (Chaldean)</span>
-        <div class="letters" style="margin-top:6px">${r.lv.map(l=> l.v ? `<span class="letter"><i>${l.ch}</i><small>${l.v}</small></span>` : (l.ch===" " ? `<span class="letter gap"></span>` : "")).join("")}</div>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="sec-head">
-        <h2>Vedic grid <span class="hi">वैदिक अंक चक्र</span></h2>
-        <p>Every non-zero digit of your birth date, plus the Moolank and Bhagyank, placed in its graha's box. Empty boxes are the energies you are asked to develop.</p>
-      </div>
-      <div class="gridwrap">
-        <div class="vgrid">
-          ${GRID.map(n=>`<div class="cell ${r.counts[n]?"":"empty"}"><div class="digits">${r.counts[n]?String(n).repeat(r.counts[n]):n}</div><div class="pl">${P[n].tr.split(" /")[0]}<br>${P[n].hi}</div></div>`).join("")}
-        </div>
-        <div class="findings">
-          <div><span class="eyebrow">Missing numbers</span>
-            <div class="chips" style="margin-top:6px">${missing.length?missing.map(n=>`<span class="chip bad">${n} · ${P[n].tr.split(" /")[0]}</span>`).join(""):'<span class="chip good">None missing</span>'}</div>
-          </div>
-          ${missing.length?`<p class="note">A missing number is traditionally balanced through that graha's remedy, e.g. ${missing.slice(0,2).map(n=>`for ${n}: ${P[n].remedy.split(";")[0].toLowerCase()}`).join("; ")}.</p>`:""}
-          ${repeated.length?`<div><span class="eyebrow">Strongly repeated</span><div class="chips" style="margin-top:6px">${repeated.map(n=>`<span class="chip warn">${n} × ${r.counts[n]} · ${P[n].tr.split(" /")[0]}</span>`).join("")}</div><p class="note" style="margin-top:6px">Three or more of one number can push its qualities to excess.</p></div>`:""}
-          ${planeHtml?`<div class="chips">${planeHtml}</div>`:""}
-        </div>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="sec-head">
-        <h2>Your graha: ${mp.tr} <span class="hi">${mp.hi}</span></h2>
-        <p>Ruler of Moolank ${r.moolank}. Lucky dates each month: ${[r.moolank, r.moolank+9, r.moolank+18, r.moolank+27].filter(x=>x<=31).join(", ")}.</p>
-      </div>
-      <dl class="profile" style="margin:0">
-        <div><dt>Day</dt><dd>${mp.day}</dd></div>
-        <div><dt>Colour</dt><dd>${mp.color}</dd></div>
-        <div><dt>Ratna</dt><dd>${mp.gem}</dd></div>
-        <div><dt>Metal</dt><dd>${mp.metal}</dd></div>
-        <div><dt>Devta</dt><dd>${mp.deity}</dd></div>
-        <div><dt>Direction</dt><dd>${mp.dir}</dd></div>
-      </dl>
-      <div class="mantra">
-        <span class="eyebrow" style="color:inherit">Beej mantra · 108 times on ${mp.day.split(" ·")[0]}</span>
-        <div class="dev">${mp.mantra}</div>
-        <div>${mp.mr}</div>
-      </div>
-      <div class="traits">
-        <div><h3>Strengths</h3><ul>${mp.plus.map(x=>`<li>${x}</li>`).join("")}</ul></div>
-        <div><h3>Watch for</h3><ul>${mp.minus.map(x=>`<li>${x}</li>`).join("")}</ul></div>
-      </div>
-      <p><strong>Upay (remedy):</strong> ${mp.remedy}</p>
-    </section>
-
-    <section class="panel">
-      <div class="sec-head">
-        <h2>Compatibility with other Moolanks <span class="hi">मित्र और शत्रु अंक</span></h2>
-        <p>How people, dates and house numbers of each Moolank tend to sit with a ${r.moolank}.</p>
-      </div>
-      <div class="compat">${[1,2,3,4,5,6,7,8,9].map(n=>{const c=relation(r.moolank,n);return `<div class="cmp ${c}"><b>${n}</b><span>${P[n].tr.split(" /")[0]}</span></div>`}).join("")}</div>
-      <div class="legend"><span class="chip good">Friendly</span><span class="chip warn">Neutral</span><span class="chip bad">Challenging</span></div>
-    </section>
-
-    <section class="panel">
-      <div class="sec-head">
-        <h2>Personal year ${r.cy} <span class="hi">व्यक्तिगत वर्ष</span></h2>
-      </div>
-      <div class="year">
-        <div class="big">${r.pYear}</div>
-        <p style="flex:1;min-width:220px">Birth day + birth month + ${r.cy}, reduced. ${YEAR[r.pYear]}</p>
-      </div>
-    </section>
-  `;
-  renderChart(r.moolank);
+    <div style="display:flex;align-items:baseline;gap:10px"><span class="score">${score}%</span><strong>${verdict}</strong></div>
+    <div class="meter"><i style="width:${score}%;background:var(--${score>=80?"good":score>=50?"warn":"bad"})"></i></div>
+    <div class="chips">
+      <span class="chip ${r1}">Your ${R.moolank} → their ${Q.moolank}: ${relWord[r1]}</span>
+      <span class="chip ${r2}">Their ${Q.moolank} → your ${R.moolank}: ${relWord[r2]}</span>
+      <span class="chip ${r3}">Bhagyank ${R.bhagyank} & ${Q.bhagyank}: ${relWord[r3]}</span>
+    </div>
+    <p class="note">Graha friendship is not always mutual, so both directions are shown.</p>`;
 }
 
-const YEAR = {
-  1:"A year of new beginnings. Start the project, take the job, plant the seed.",
-  2:"A slower year for partnerships and patience. Cooperate rather than push.",
-  3:"A year of learning, growth and expression. Good for study and teaching.",
-  4:"A year of hard work and foundations. Expect effort and some surprises.",
-  5:"A year of change, travel and movement. Stay flexible.",
-  6:"A year of home, family and responsibility. Good for marriage and property.",
-  7:"A year of reflection and inner work. Research, rest, spiritual practice.",
-  8:"A year of karma and results. Discipline pays; shortcuts cost.",
-  9:"A year of completion. Finish, let go and clear space for the next cycle."
-};
-
-function renderChart(me){
-  const t = document.getElementById("chart");
-  t.innerHTML = `<thead><tr><th>Ank</th><th>Graha</th><th>Day</th><th>Colour</th><th>Ratna</th><th>Nature</th></tr></thead><tbody>${
-    [1,2,3,4,5,6,7,8,9].map(n=>{const p=P[n];return `<tr class="${n===me?"me":""}"><td>${n}</td><td>${p.tr}<br><span class="hi">${p.hi} · ${p.en}</span></td><td>${p.day.split(" ·")[0]}</td><td>${p.color}</td><td>${p.gem}</td><td>${p.plus[0]}</td></tr>`}).join("")
-  }</tbody>`;
+// navigation
+const titles = {home:["Ank Jyotish","अंक ज्योतिष · Vedic numerology"],grid:["Chakra","Vedic grid"],graha:["Graha","Planet, mantra and remedy"],milan:["Milan","Compatibility"],gyaan:["Gyaan","Learn the system"]};
+function go(tab, push=true){
+  document.querySelectorAll("[data-screen]").forEach(s=>s.hidden = s.dataset.screen!==tab);
+  document.querySelectorAll("[data-tab]").forEach(b=>{ if(b.dataset.tab===tab) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
+  $("tb-title").textContent = titles[tab][0]; $("tb-sub").textContent = titles[tab][1];
+  window.scrollTo(0,0);
+  if(push){ try{ history.replaceState(null,"","#"+tab); }catch(e){} }
 }
+document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.tab)));
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{ const n=+b.dataset.n; if(n){ grahaSel=n; renderGraha(); go("graha"); } }));
+$("picker").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; grahaSel=+b.dataset.n; renderGraha(); });
+$("ref").addEventListener("click",e=>{ const b=e.target.closest(".row"); if(!b) return; grahaSel=+b.dataset.n; renderGraha(); go("graha"); });
 
-document.getElementById("f").addEventListener("submit",e=>{e.preventDefault();render();});
-document.getElementById("name").addEventListener("input",render);
-document.getElementById("dob").addEventListener("change",render);
-render();
+$("editBtn").addEventListener("click",()=>{ const f=$("f"); f.hidden=!f.hidden; $("editBtn").textContent=f.hidden?"Edit":"Close"; if(!f.hidden) $("name").focus(); });
+$("f").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=$("name").value.trim(), dob=$("dob").value;
+  if(!name||!dob) return;
+  me={name,dob}; store("ank.me",me); grahaSel=null;
+  $("f").hidden=true; $("editBtn").textContent="Edit";
+  renderAll();
+});
+$("pf").addEventListener("submit",e=>{ e.preventDefault(); renderMatch(); store("ank.partner",{name:$("pname").value,dob:$("pdob").value}); });
+$("copyBtn").addEventListener("click",()=>{
+  const t = P[grahaSel].mantra + "\n" + P[grahaSel].mr;
+  const done = ()=>{ $("copyBtn").textContent="Copied"; };
+  try{ navigator.clipboard.writeText(t).then(done,()=>{}); }catch(e){}
+});
+
+// install prompt (Android / desktop Chrome)
+let deferred = null;
+window.addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferred=e; $("installBar").hidden=false; });
+$("installBtn").addEventListener("click",async()=>{ if(!deferred) return; deferred.prompt(); await deferred.userChoice; deferred=null; $("installBar").hidden=true; });
+window.addEventListener("appinstalled",()=>{ $("installBar").hidden=true; });
+
+if("serviceWorker" in navigator && location.protocol==="https:"){ navigator.serviceWorker.register("sw.js").catch(()=>{}); }
+
+const partner = load("ank.partner");
+if(partner){ $("pname").value = partner.name||""; $("pdob").value = partner.dob||""; }
+renderAll();
+const start = (location.hash||"").slice(1);
+go(titles[start] ? start : "home", false);
 </script>
-
 </body>
 </html>
